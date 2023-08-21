@@ -27,7 +27,7 @@ knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.
 
 <center>
 
-<h1>Federal Funds Tracker</h1>
+<h1>Federal Funds Dashboard</h1>
 
 
 </center>
