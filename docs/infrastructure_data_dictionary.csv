@@ -1,0 +1,15 @@
+﻿Column Name,Definition
+category,"The type of program, one of ""Transit"", ""Airports"", ""Electric Vehicles"", ""Water"" and ""Roads, Bridges, and Major Projects"""
+agency,Name of federal agency funding the program. NA if agency is not known.
+sub_agency,More specific unit within federal agency providing the funding
+funding_type,Indicates the type of federal funding. See FAQ for the categories and definitions.
+description,Short text description of the objectives of the program 
+expiration,"Provides information on the duration or expiration of the program. In many cases, this is a time period or description rather than exact date"
+total_funding_b,5-year total program funding in billions
+cfda,Assistance Listing Number
+program_name,"Name of the program. The data is at the program level, so each row represents a unique program, jurisdiction, year combination."
+ffy,Federal fiscal year
+recipient_name,"Name of the entity receiving the federal funds. For funds to Illinois, this will be Illinois - Chicago Area at the award stage when more information about precise uses is known and we can filter to funds to be used in the Chicago Area, and Illinois - Location TBD at the allocation stage when more precise location of use information is not known. "
+amount,Raw amount of funding
+amount_type,"Indicates whether the funds are an allocation or award. For more information on the definitions and difference between allocations and awards, see the FAQ."
+summary_name,"Recipient name displayed in the dashboard for allocations, in some cases consolidates multiple more specific recipients into a broader group. "
