@@ -1,0 +1,20 @@
+name: Federal Funds Dashboard
+navbar:
+  title: Federal Funds Dashboard
+  left:
+  - text: Home
+    href: index.html
+  - text: Recovery Funds
+    href: recovery-funds.html
+  - text: Infrastructure Funds
+    href: infrastructure-funds.html
+  - text: Frequently Asked Questions
+    href: FAQ.html
+  - text: Glossary
+    href: glossary.html
+output:
+  html_document:
+    output_dir: '.'
+    css: !expr here::here("www", "web_report_trust.css")
+    self_contained: TRUE
+output_dir: '.'
