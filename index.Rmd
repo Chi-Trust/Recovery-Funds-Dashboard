@@ -27,14 +27,17 @@ knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.
 
 <center>
 
-<h1>Federal Funds Dashboard</h1>
+<h1>DRAFT Federal Funds Tracker</h1>
 
+**This dashboard is a draft undergoing active development. It should not be shared or used for analysis. The most recent published version of the dashboard can be found [here](https://chi-trust.github.io/Recovery-Funds-Dashboard/index.html)**
 
 </center>
 
-Federal COVID-19 pandemic response packages have provided state and local governments with unprecedented aid. The impact of these resources will directly result from how they are spent and in which communities. Given this unparalleled opportunity to ensure federal funds reach communities that need them most and propel momentum toward closing the racial and ethnic wealth gap, this dashboard aims to provide transparency on where funds are landing.
+The [Recovery Funds Dashboard](./recovery-funds.html) tracks a subset of the federal recovery funds flowing from the Coronavirus Aid, Relief, and Economic Security Act (CARES), the Consolidated Appropriations Act 2021 (CRRSAA), and the American Rescue Plan Act (ARPA) into Chicago, Cook County, and the State of Illinois.
 
-<br>
+The [Infrastructure Funds Dashboard](./infrastructure-funds.html) tracks federal funding flowing from the Infrastructure Investment and Jobs Act (IIJA) to all recipients in the Chicago area.
+
+All funding amounts in the Recovery Funds Dashboard represent allocations made by the federal government to the governments of Chicago, Cook County, or Illinois. The Infrastructure Funds Dashboard includes a mix of allocations and awards: federal awards funding for all previous fiscal years (which is more precise in exact amount and use) and allocations for the current fiscal year (for which award details may not yet be known). Allocations of funds to the state of Illinois represent the total funding available to be spent throughout the state, and not only in the Chicago area. At the allocation stage, we don't have enough information on precise uses to narrow to funds that will be spent in the Chicago area. For IIJA programs, the award information published by federal agencies is detailed enough to enable us to restrict the awards to the state of Illinois shown in the dashboard to only those for infrastructure projects in the city of Chicago or in Cook County. For CARES, CRRSAA, and ARPA programs, this level of geographically specific awards data is not available, so all allocations to Illinois are included.
 
 ```{r}
 #| echo: false
@@ -50,123 +53,141 @@ knitr::opts_chunk$set(fig.width = 6)
 library(tidyverse)
 library(here)
 library(urbnthemes)
-library(plotly)
-library(aws.s3)
-library(dotenv)
 set_urbn_defaults(style = "print", base_size = 12)
 
 # read infrastructure data
-inf_data <- read_csv(here("data/intermediate_data", 
-                          "inf_data_clean.csv")) %>%
-  mutate(legislation = "IIJA")  %>%
-  select(final_allocation = amount, legislation, recipient_name = summary_recipient)
+inf_data <- read_csv(here(
+  "data/intermediate_data",
+  "inf_data_clean.csv"
+)) %>%
+  mutate(legislation = "IIJA") %>%
+  select(final_allocation = amount, legislation, recipient_name)
 
 # read recovery data
-rec_data <- read_csv(here("data/intermediate_data",
-                          "clean_data_dashboard.csv")) %>%
-  rename("recipient_name" = "geography", 
-         "final_allocation" = "allocation") %>%
-  mutate(recipient_name = if_else(recipient_name == "Chicago", 
-                                  "City of Chicago", 
-                                  recipient_name)) %>%
-  select(final_allocation, legislation, recipient_name) 
+rec_data <- read_csv(here(
+  "data/intermediate_data",
+  "clean_data_dashboard.csv"
+)) %>%
+  rename(
+    "recipient_name" = "geography",
+    "final_allocation" = "allocation"
+  ) %>%
+  select(final_allocation, legislation, recipient_name) %>%
+  mutate(recipient_name = if_else(recipient_name == "Illinois", "Illinois - Location Unknown", recipient_name))
 
 
 all_data <- rbind(inf_data, rec_data) %>%
   mutate(legislation = case_when(
     legislation == "ARPA State and Local Fiscal Recovery Funds" ~
-       "ARPA State and Local\nFiscal Recovery Funds",
+      "ARPA State and Local\nFiscal Recovery Funds",
     legislation == "Chicago General Obligation Bond" ~
       "Chicago General\nObligation Bond",
     TRUE ~ legislation
   ))
-
 ```
 
 ```{r}
-plot_funds_by_var <- function(data, fill_var, lab_text){
-  
+plot_funds_by_var <- function(data, fill_var, lab_text) {
   data <- data %>%
     mutate(final_allocation = final_allocation / 1000000)
-  
+
   fill_var <- enquo(fill_var)
-  
+
   var_levels <- data %>%
-    group_by(!!fill_var) %>% 
+    group_by(!!fill_var) %>%
     summarise(total_allocation = sum(final_allocation, na.rm = TRUE)) %>%
-    arrange(total_allocation) %>% 
-    pull(!!fill_var) %>% 
+    arrange(total_allocation) %>%
+    pull(!!fill_var) %>%
     unique()
- 
- 
+
+
   fill_breaks <- data %>%
-     pull(!!fill_var) %>%
-     unique()
-  
+    pull(!!fill_var) %>%
+    unique()
+
   if (length(fill_breaks) > 6) {
     fill_values <- rep(c("#47c3d3"), each = length(fill_breaks))
   } else {
-    fill_values <- c("#47c3d3", "#C1D82F", "#6C5893", "#000000", 
-                    "#387ECF", "#FDBB30")[1:length(fill_breaks)]
+    fill_values <- c(
+      "#47c3d3", "#C1D82F", "#6C5893", "#000000",
+      "#387ECF", "#FDBB30"
+    )[1:length(fill_breaks)]
   }
-   
-  
-  allocations_by_var <- data %>% 
+
+
+  allocations_by_var <- data %>%
     group_by(!!fill_var) %>%
     summarise(final_allocation = sum(final_allocation, na.rm = TRUE)) %>%
-    mutate(allocation_str = scales::dollar(final_allocation),
-           label_height = cumsum(final_allocation),
-           !!fill_var := factor(!!fill_var, levels = var_levels)) %>% 
+    mutate(
+      allocation_str = scales::dollar(final_allocation),
+      label_height = cumsum(final_allocation),
+      !!fill_var := factor(!!fill_var, levels = var_levels)
+    ) %>%
     ggplot() +
-    geom_col(mapping = aes(x = !!fill_var, 
-                                  y = final_allocation, 
-                                  fill = !!fill_var,
-                                  text = allocation_str)) +
-    scale_y_continuous(expand = expansion(mult = c(0, 0.01)), 
-                     labels = scales::dollar) +
-    scale_fill_manual(values = fill_values,
-                      breaks = fill_breaks)+
-    labs(x = lab_text, 
-         y = "Total Allocation (millions)",
-         caption = "This graph shows selected projects funded through ARPA, CARES, CRRSAA, and IIJA. For more detail, see the FAQ.") +
+    geom_col(mapping = aes(
+      x = !!fill_var,
+      y = final_allocation,
+      fill = !!fill_var,
+      text = allocation_str
+    )) +
+    scale_y_continuous(
+      expand = expansion(mult = c(0, 0.01)),
+      labels = scales::dollar
+    ) +
+    scale_fill_manual(
+      values = fill_values,
+      breaks = fill_breaks
+    ) +
+    labs(
+      x = lab_text,
+      y = "Total Allocation (millions)",
+      caption = "This graph shows selected projects funded through ARPA, CARES, CRRSAA, and IIJA. For more detail, see the FAQ."
+    ) +
     coord_flip() +
-    theme(text = element_text(family = "Merriweather",
-                              face = "plain",
-                                 colour = "#000000",
-                                 size = 8,
-                                 hjust = 0.5,
-                                 vjust = 0.5,
-                                 angle = 0,
-                                 lineheight = 0.9,
-                                 margin = ggplot2::margin(),
-                                 debug = FALSE),
-          legend.position = "none",
-          axis.text.y = element_text(family = "Merriweather",
-                              face = "plain",
-                                 colour = "#000000",
-                                 size = 9,
-                                 hjust = 0.5,
-                                 vjust = 0.5,
-                                 angle = 0,
-                                 lineheight = 0.9,
-                                 margin = ggplot2::margin(),
-                                 debug = FALSE),
-          axis.text.x = element_text(family = "Merriweather",
-                              face = "plain",
-                                 colour = "#000000",
-                                 size = 9,
-                                 hjust = 0.5,
-                                 vjust = 0.5,
-                                 angle = 0,
-                                 lineheight = 0.9,
-                                 margin = ggplot2::margin(),
-                                 debug = FALSE),
-          plot.caption.position = "plot",
-          plot.caption = element_text(hjust = 0))
-  
+    theme(
+      text = element_text(
+        family = "Merriweather",
+        face = "plain",
+        colour = "#000000",
+        size = 8,
+        hjust = 0.5,
+        vjust = 0.5,
+        angle = 0,
+        lineheight = 0.9,
+        margin = ggplot2::margin(),
+        debug = FALSE
+      ),
+      legend.position = "none",
+      axis.text.y = element_text(
+        family = "Merriweather",
+        face = "plain",
+        colour = "#000000",
+        size = 9,
+        hjust = 0.5,
+        vjust = 0.5,
+        angle = 0,
+        lineheight = 0.9,
+        margin = ggplot2::margin(),
+        debug = FALSE
+      ),
+      axis.text.x = element_text(
+        family = "Merriweather",
+        face = "plain",
+        colour = "#000000",
+        size = 9,
+        hjust = 0.5,
+        vjust = 0.5,
+        angle = 0,
+        lineheight = 0.9,
+        margin = ggplot2::margin(),
+        debug = FALSE
+      ),
+      plot.caption.position = "plot",
+      plot.caption = element_text(hjust = 0)
+    )
+
   return(allocations_by_var)
 }
-
 ```
 
 # Total Dollars Tracked {.tabset .tabset-pills}
@@ -178,7 +199,6 @@ plot_funds_by_var <- function(data, fill_var, lab_text){
 #| fig-height: 4
 #| fig-alt: "TBD"
 plot_funds_by_var(all_data, legislation, "Legislation")
-
 ```
 
 ## By Recipient
@@ -188,40 +208,22 @@ plot_funds_by_var(all_data, legislation, "Legislation")
 #| fig-height: 4
 #| fig-alt: "TBD"
 plot_funds_by_var(all_data, recipient_name, "Recipient")
-
 ```
 
-# About the Dashboard
+# About the Dashboard {#sec-about}
 
-```{r}
-#| echo: false
-#| include: false
+The inclusive recovery funds we track represent a subset of COVID-19 assistance provided by the federal government. The dashboard only reflects funds flowing directly from the federal government to the State of Illinois, Cook County, and the City of Chicago that can be used for inclusive recovery efforts that align with key priorities of The Chicago Community Trust: community investment, community safety, household investment, housing, and workforce development, which are all vital to narrowing the Chicago region's racial and ethnic wealth gap. It does not include funds provided by the federal government directly to public housing authorities, school districts, universities, or nongovernmental organizations, such as non-profits or private sector firms.
 
-bucket_name <- Sys.getenv("s3_bucket")
+[Download all the data used in the dashboard (.zip)](https://federal-funds-equity.s3.amazonaws.com/all_programs_total.zip)
 
-zip::zip(zipfile = here("data/dashboard_downloads", "all_dashboard_data.zip"),
-         files = c(
-           "data/intermediate_data/recovery_dashboard_data.csv",
-           "data/intermediate_data/infrastructure_dashboard_data.csv",
-           "docs/recovery_data_dictionary.csv",
-           "docs/infrastructure_data_dictionary.csv"
-           )
-  )
-  
-  put_object(file = here("data/dashboard_downloads", "all_dashboard_data.zip"),
-             bucket = bucket_name,
-             object = "all_dashboard_data.zip")
-
+```{r, eval = FALSE}
+# data_out <- format_write_data_download(all_data, "total", "all_programs")
 ```
-
-The funds we tracked represent two streams of federal dollars flowing to Illinois: [economic recovery funds](./recovery-funds.html) and [infrastructure funds](./infrastructure-funds.html). By adding clarity around how federal funds are being disbursed locally and for what purposes, we can begin to understand and hold ourselves collectively responsible for ensuring the Chicago region recovers equitably and inclusively.  
-
-As new data becomes available, more program allocation and spending information will be added. For more information, see our [Frequently Asked Questions](./FAQ.html) and [Glossary](./glossary.html).
-
-For more information about the dashboard, please contact [Aimee Ramirez](mailto:aramirez@cct.org) (The Chicago Community Trust) and [Karolina Ramos](mailto:kramos@urban.org) (Urban Institute).
-
-[Download all the data used in the dashboard (.zip)](https://federal-funds-equity.s3.amazonaws.com/all_dashboard_data.zip)
-
-The code used to create this dashboard can be found on [GitHub](https://github.com/Chi-Trust/Recovery-Funds-Dashboard).
 
 This project is a collaboration between [The Chicago Community Trust](https://www.cct.org/) and the [Urban Institute](https://www.urban.org/). It is supported by a grant from the Kresge Foundation through the [Shared Prosperity Partnership](http://www.sharedprosperitypartnership.org/).
+
+For more information, see our [Frequently Asked Questions](./FAQ.html) and [Glossary](./glossary.html).
+
+Please contact [Aimee Ramirez](mailto:aramirez@cct.org) (The Chicago Community Trust) and [Karolina Ramos](mailto:kramos@urban.org) (Urban Institute) with questions.
+
+The code used to create this dashboard can be found on [GitHub](https://github.com/Chi-Trust/Recovery-Funds-Dashboard).

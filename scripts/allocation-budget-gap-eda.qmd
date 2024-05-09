@@ -1,0 +1,212 @@
+---
+title: "Highlight projects with a large gap between allocations and adopted budget"
+format:
+  html:
+    code-fold: true
+    number-sections: false
+    embed-resources: true
+    toc: false
+    toc-float: false
+    css: ../www/web_report_trust.css 
+editor_options:
+  chunk_output_type: console
+execute:
+  warning: false
+  message: false
+---
+
+## Introduction
+
+```{r}
+#| label: setup
+#| code-summary: Load Packages
+
+librarian::shelf(tidyverse, here, urbnthemes, epoxy, skimr, reactable, ggalt)
+urbnthemes::set_urbn_defaults()
+options(scipen = 999)
+```
+
+## REMOVE CAPACITY BUID
+```{r}
+#| label: import-data
+#| code-summary: Read Data and Calculate Shortfall
+
+data_raw <- read_csv(here("data", "intermediate_data", "clean_data_dashboard.csv"))
+data <-
+  data_raw |>
+  select(geography, legislation, topic, subtopic, allocation, adopted_budget_per_treasury_report) |>
+  summarise(
+    across(
+      .cols = c(adopted_budget_per_treasury_report, allocation),
+      .fns = ~ sum(.x, na.rm = TRUE)
+    ),
+    .by = c("geography", "topic")
+  ) |>
+  mutate(
+    budget_to_allocation_gap = adopted_budget_per_treasury_report - allocation
+  )
+
+skim(data)
+```
+
+
+## Exploratory Data Analysis
+
+```{r}
+#| label: tbl-data
+
+data |>
+  rename_with(~ str_replace_all(.x, "_", " "), c(adopted_budget_per_treasury_report, budget_to_allocation_gap)) |>
+  rename_with(~ str_to_title(.x), everything()) |>
+  mutate(across(
+    where(is.numeric),
+    ~ .x / 1e9
+  )) |>
+  reactable(
+    filterable = TRUE,
+    searchable = TRUE,
+    columns = list(
+      `Topic` = colDef(
+        aggregate = "count",
+        format = list(
+          cell = colFormat(),
+          aggregated = colFormat(suffix = " topics")
+        )
+      ),
+      `Budget To Allocation Gap` = colDef(
+        filterable = FALSE,
+        aggregate = "sum",
+        format = colFormat(
+          separators = TRUE,
+          currency = "USD",
+          digits = 0,
+          suffix = "B"
+        )
+      ),
+      `Allocation` = colDef(
+        filterable = FALSE,
+        aggregate = "sum",
+        format = colFormat(
+          separators = TRUE,
+          currency = "USD",
+          digits = 0,
+          suffix = "B"
+        )
+      ),
+      `Adopted Budget Per Treasury Report` = colDef(
+        filterable = FALSE,
+        aggregate = "sum",
+        format = colFormat(
+          separators = TRUE,
+          currency = "USD",
+          digits = 0, suffix = "B"
+        )
+      )
+    ),
+    groupBy = c("Geography"),
+    paginateSubRows = TRUE,
+    bordered = TRUE,
+    highlight = TRUE,
+    striped = TRUE
+  )
+```
+
+```{r}
+#| label: shortfalls-percentiles
+#| code-summary: Calculate Percentiles
+
+percentiles <- quantile(data$budget_to_allocation_gap, probs = c(0.1, 0.25, 0.5, 0.75, 0.9), na.rm = TRUE)
+percentiles |>
+  as_tibble() |>
+  mutate(value = scales::label_dollar(scale = 1 / 1e3, suffix = " K")(value))
+```
+
+
+```{r}
+#| label: fig-hist
+#| include: false
+
+# Plotting, including percentile lines in a loop
+ggplot(data, aes(x = budget_to_allocation_gap)) +
+  geom_histogram() +
+  lapply(names(percentiles), function(p) {
+    geom_vline(aes(xintercept = percentiles[p]), color = palette_urbn_red[2], linetype = "dashed")
+  }) +
+  scale_x_continuous(labels = scales::label_dollar(scale = 1 / 1e9, suffix = "B")) +
+  labs(
+    title = "Distribution of budget shortfalls",
+    x = "Difference between allocations",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  facet_wrap(geography ~ ., nrow = 3)
+```
+
+
+```{r}
+#| label: fig-bars
+
+ggplot(data, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col() +
+  facet_wrap(. ~ geography, nrow = 3) +
+  scale_x_continuous(labels = scales::label_dollar(
+    scale = 1 / 1e9, suffix = "B",
+    accuracy = 0.1
+  ))
+```
+
+```{r}
+# TODO: Try violin, box plots, ridge line plots or density plots https://bookdown.org/pdr_higgins/rmrwr/univariate-ggplots-to-visualize-distributions.html
+#
+# Dumbell plot could be good too: https://bookdown.org/pdr_higgins/rmrwr/extensions-to-ggplot.html#packages-needed-for-this-chapter-3
+#
+# install.packages("ggplot2")
+
+budget_gap <-
+  data_raw |>
+  select(geography, legislation, topic, subtopic, allocation, adopted_budget_per_treasury_report) |>
+  summarise(
+    across(
+      .cols = c(adopted_budget_per_treasury_report, allocation),
+      .fns = ~ sum(.x, na.rm = TRUE)
+    ),
+    .by = c("geography", "topic")
+  ) |>
+  mutate(
+    budget_to_allocation_gap = adopted_budget_per_treasury_report - allocation
+  ) |>
+  filter(topic != "Capacity Building")
+
+budget_gap_long <- budget_gap |>
+  pivot_longer(c(adopted_budget_per_treasury_report, allocation))
+
+# TODO: ADD DATA LABELS https://r-graph-gallery.com/web-extended-dumbbell-plot-ggplot2.html
+
+ggplot(budget_gap, aes(y = topic)) +
+  geom_dumbbell(aes(x = adopted_budget_per_treasury_report, xend = allocation),
+    dot_guide_size = 0.25, color = "darkgray", # Color of the line
+    size = 1, # Line width
+    dot_guide = FALSE, # Whether to add a guide from origin to X or not
+    size_x = 2, # Size of the X point
+    size_xend = 2, # Size of the X end point
+    color_x = "#387ECF", # Color of the X point
+    color_xend = "#FDBB30", # Color of the X end point
+    color = "#e3e2e1"
+  ) + # Color of the X end point
+  geom_point(data = budget_gap_long, aes(x = value, color = name), size = 2) +
+  scale_color_manual(
+    name = "",
+    labels = c("Adopted Budget", "Allocation"),
+    values = c("#387ECF", "#FDBB30")
+  ) +
+  scale_x_continuous(labels = scales::label_currency(scale = 1 / 1e9, suffix = "B")) +
+  facet_wrap(. ~ geography, nrow = 3) +
+  theme(legend.position = "bottom") +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Gap between allocations and adopted budget",
+    subtitle = "By topic"
+  )
+```
