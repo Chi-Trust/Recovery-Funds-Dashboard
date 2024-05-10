@@ -58,7 +58,7 @@ set_urbn_defaults(style = "print", base_size = 12)
 # read infrastructure data
 inf_data <- read_csv(here(
   "data/intermediate_data",
-  "inf_data_clean.csv"
+  "infrastructure_dashboard_data.csv"
 )) %>%
   mutate(legislation = "IIJA") %>%
   select(final_allocation = amount, legislation, recipient_name)
