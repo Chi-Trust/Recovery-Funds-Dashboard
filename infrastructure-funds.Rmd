@@ -83,12 +83,25 @@ library(scales)
 
 set_urbn_defaults(style = "print", base_size = 12)
 
-pc_font_path <- "C:/Users/astern/AppData/Local/Microsoft/Windows/Fonts/"
-mac_font_path <- "~/Library/Fonts"
+# Load Merriweather font
+uname <- "RPitingo"
 
-font_import(paths = pc_font_path,
-            pattern = "Merriweather",
-            prompt = FALSE
+pc_font_path <- paste0("C:/Users/", uname, "/AppData/Local/Microsoft/Windows/Fonts/")
+mac_font_path <- "~/Library/Fonts"
+font_path <-
+  switch(Sys.info()[["sysname"]],
+    Windows = {
+      pc_font_path
+    },
+    Darwin = {
+      "~/Library/Fonts"
+    }
+  )
+
+font_import(
+  paths = font_path,
+  pattern = "Merriweather",
+  prompt = FALSE
 )
 
 # set current fiscal year 
@@ -241,7 +254,18 @@ all_totals <- allocation_totals %>%
          pct_diff = round((amount_diff/total_amount_allocation)*100, 2)) %>%
   left_join(data_programs %>% select(category, program_name), by = "program_name")
 
-write_csv(all_totals, "data/intermediate_data/allocation_award_diff.csv")
+
+# Set the intermediate folder
+intermediate_path <- here("data/intermediate_data")
+
+# Check if the intermediate folder exists
+if (!file.exists(intermediate_path)) {
+  # If it doesn't exist, create it
+  dir.create(intermediate_path, recursive = TRUE)
+}
+
+# Write the CSV file to the directory
+write_csv(all_totals, file.path(intermediate_path, "allocation_award_diff"))
 
 ```
 
