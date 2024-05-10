@@ -50,20 +50,25 @@ librarian::shelf(
   zoo,
   palettes,
   xaringanExtra,
-  dotenv
+  dotenv,
+  sknifedatar
 )
 
-# remotes::install_version("sknifedatar", version = "0.1.2", repos = "http://cran.us.r-project.org")
-library(sknifedatar)
+# Set the s3_bucket environment variable
+Sys.setenv(s3_bucket = "federal-funds-equity")
 
+# Urban theme settings
 set_urbn_defaults(style = "print", base_size = 12)
 
-pc_font_path <- "C:/Users/astern/AppData/Local/Microsoft/Windows/Fonts/"
+# Load Merriweather font
+uname <- "RPitingo"
+
+pc_font_path <- paste0("C:/Users/", uname, "/AppData/Local/Microsoft/Windows/Fonts/")
 mac_font_path <- "~/Library/Fonts"
 font_path <-
   switch(Sys.info()[["sysname"]],
     Windows = {
-      "C:/Users/astern/AppData/Local/Microsoft/Windows/Fonts/"
+      pc_font_path
     },
     Darwin = {
       "~/Library/Fonts"
@@ -216,7 +221,17 @@ data_all <- read_csv(
 data <- data_all %>%
   filter(legislation != "Chicago General Obligation Bond")
 
-write_csv(data_all, here("data/intermediate_data", "clean_data_dashboard.csv"))
+# Set the intermediate folder
+intermediate_path <- here("data/intermediate_data")
+
+# Check if the intermediate folder exists
+if (!file.exists(intermediate_path)) {
+  # If it doesn't exist, create it
+  dir.create(intermediate_path, recursive = TRUE)
+}
+
+# Write the CSV file to the directory
+write_csv(data_all, file.path(intermediate_path, "clean_data_dashboard.csv"))
 ```
 
 ```{r calculate-appropriations, include=FALSE}
