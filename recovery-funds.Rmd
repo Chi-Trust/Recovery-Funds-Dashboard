@@ -542,7 +542,6 @@ allocations_vs_spending <-
 xaringanExtra::use_panelset()
 ```
 
-`r sknifedatar::automagic_tabs(input_data = allocations_vs_spending, panel_name = "geography", .output = "plots", tabset_props = ".tabset-pills", is_output_distill = FALSE, fig.width=10, fig.height=6,fig.cap="This graph compares the percent of ARPA SLFRF dollars by policy topic between the original recovery plan and spending to date")`
 
 ## Gap Between Allocations and Adopted Budget
 
@@ -846,7 +845,6 @@ nested_data <-
 xaringanExtra::use_panelset()
 ```
 
-`r sknifedatar::automagic_tabs(input_data = nested_data, panel_name = "geography", .output = "ts_plots", tabset_props = ".tabset-pills", is_output_distill = FALSE, fig.width=10, fig.height=6)`
 
 # Explore Funding by Policy Area {.tabset .tabset-dropdown}
 
