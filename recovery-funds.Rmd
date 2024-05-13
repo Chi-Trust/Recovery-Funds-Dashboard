@@ -54,9 +54,6 @@ librarian::shelf(
   sknifedatar
 )
 
-# Set the s3_bucket environment variable
-Sys.setenv(s3_bucket = "federal-funds-equity")
-
 # Urban theme settings
 set_urbn_defaults(style = "print", base_size = 12)
 
@@ -87,6 +84,15 @@ palette <- pal_palette(
     "#387ECF", "#FDBB30"
   )
 )
+
+# Check if the 's3_bucket' environment variable is set
+s3_bucket <- Sys.getenv("s3_bucket")
+
+# Stop the script if 's3_bucket' is not defined
+if (s3_bucket == "") {
+  stop("Environment variable 's3_bucket' must be defined in your .Renviron file for this code to work. Please update 's3_bucket' in .Renviron and try again.")
+}
+
 ```
 
 ```{=html}
