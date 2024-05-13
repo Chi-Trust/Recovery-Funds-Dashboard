@@ -576,47 +576,115 @@ budget_gap_long <- budget_gap |>
 #### Chicago
 
 ```{r c7, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Chicago")
+#budget_gap_filter <- filter(budget_gap, geography == "Chicago")
+#budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
+
+#ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+#  geom_col() +
+#  scale_x_continuous(labels = scales::label_dollar(
+#    scale = 1 / 1e6,
+#    accuracy = 0.1
+#  )) +
+#  labs(y = NULL, x = "(Millions)")
+
+budget_gap_filter <- filter(budget_gap, geography == "Chicago") %>%
+  mutate(percentage = adopted_budget_per_treasury_report / allocation * 100)
+
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
 
-ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col() +
-  scale_x_continuous(labels = scales::label_dollar(
-    scale = 1 / 1e6,
-    accuracy = 0.1
-  )) +
+p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col(aes(text = paste("Original Allocation: ", allocation, 
+                            "<br>Current Spending: ", adopted_budget_per_treasury_report, 
+                            "<br>Percentage: ", round(percentage, 2), "%"))) +
+  scale_x_continuous(
+    limits = c(-500000000, 200000000),
+    labels = scales::label_dollar(
+      scale = 1 / 1e6,
+      accuracy = 0.1
+    )
+  ) +
   labs(y = NULL, x = "(Millions)")
+
+ggplotly(p, tooltip = "text", height = 450)
+
 ```
+**Note:** Percentages may be greater than 100 percent for Reasons.
+<br> <br>
 
 #### Cook County
 
 ```{r, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Cook County")
+#budget_gap_filter <- filter(budget_gap, geography == "Cook County")
+#budget_gap_long_filter <- filter(budget_gap_long, geography == "Cook County")
+
+#ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+#  geom_col() +
+#  scale_x_continuous(labels = scales::label_dollar(
+#    scale = 1 / 1e6,
+#    accuracy = 0.1
+#  )) +
+#  labs(y = NULL, x = "(Millions)")
+
+budget_gap_filter <- filter(budget_gap, geography == "Cook County") %>%
+  mutate(percentage = adopted_budget_per_treasury_report / allocation * 100)
+
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Cook County")
 
-ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col() +
-  scale_x_continuous(labels = scales::label_dollar(
-    scale = 1 / 1e6,
-    accuracy = 0.1
-  )) +
+p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col(aes(text = paste("Original Allocation: ", allocation, 
+                            "<br>Current Spending: ", adopted_budget_per_treasury_report, 
+                            "<br>Percentage: ", round(percentage, 2), "%"))) +
+  scale_x_continuous(
+    limits = c(-500000000, 200000000),
+    labels = scales::label_dollar(
+      scale = 1 / 1e6,
+      accuracy = 0.1
+    )
+  ) +
   labs(y = NULL, x = "(Millions)")
+
+ggplotly(p, tooltip = "text", height = 450)
 ```
+**Note:** Percentages may be greater than 100 percent for Reasons.
+<br> <br>
 
 #### Illinois
 
 ```{r, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Illinois")
+#budget_gap_filter <- filter(budget_gap, geography == "Illinois")
+#budget_gap_long_filter <- filter(budget_gap_long, geography == "Illinois")
+
+#ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+#  geom_col() +
+#  scale_x_continuous(labels = scales::label_dollar(
+#    scale = 1 / 1e6,
+#    accuracy = 0.1
+#  )) +
+#  labs(y = NULL, x = "(Millions)")
+
+
+budget_gap_filter <- filter(budget_gap, geography == "Illinois") %>%
+  mutate(percentage = adopted_budget_per_treasury_report / allocation * 100)
+
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Illinois")
 
-ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col() +
-  scale_x_continuous(labels = scales::label_dollar(
-    scale = 1 / 1e6,
-    accuracy = 0.1
-  )) +
+p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col(aes(text = paste("Original Allocation: ", allocation, 
+                            "<br>Current Spending: ", adopted_budget_per_treasury_report, 
+                            "<br>Percentage: ", round(percentage, 2), "%"))) +
+  scale_x_continuous(
+    limits = c(-5000000000, 2000000000),
+    labels = scales::label_dollar(
+      scale = 1 / 1e6,
+      accuracy = 0.1
+    )
+  ) +
   labs(y = NULL, x = "(Millions)")
+
+ggplotly(p, tooltip = "text", height = 450)
 ```
+**Note:** Percentages may be greater than 100 percent for Reasons.
+<br> <br>
 
 ### Option B: {.tabset .tabset-pills}
 
@@ -2904,6 +2972,24 @@ leaflet_grid
 ```
 
 ## ARPA SLFRF
+
+```{r ARPA SLFRF summary table}
+total_program <- data %>%
+  filter(
+    program == "Emergency Rental Housing Assistance (ERA2)",
+    geography == "Chicago"
+  ) %>%
+  pull(allocation)
+
+make_sum_table(
+  "ARPA SLFRF",
+  "Chicago",
+  total_program,
+  total_funding,
+  total_chicago,
+  "1900-01-01"
+)
+```
 
 ```{r}
 make_leaflet_arpa <- function(chicago_zip_totals, col_breaks) {
