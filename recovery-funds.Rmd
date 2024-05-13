@@ -50,20 +50,22 @@ librarian::shelf(
   zoo,
   palettes,
   xaringanExtra,
-  dotenv
+  dotenv,
+  sknifedatar
 )
 
-# remotes::install_version("sknifedatar", version = "0.1.2", repos = "http://cran.us.r-project.org")
-library(sknifedatar)
-
+# Urban theme settings
 set_urbn_defaults(style = "print", base_size = 12)
 
-pc_font_path <- "C:/Users/astern/AppData/Local/Microsoft/Windows/Fonts/"
+# Load Merriweather font
+uname <- "RPitingo"
+
+pc_font_path <- paste0("C:/Users/", uname, "/AppData/Local/Microsoft/Windows/Fonts/")
 mac_font_path <- "~/Library/Fonts"
 font_path <-
   switch(Sys.info()[["sysname"]],
     Windows = {
-      "C:/Users/astern/AppData/Local/Microsoft/Windows/Fonts/"
+      pc_font_path
     },
     Darwin = {
       "~/Library/Fonts"
@@ -82,6 +84,15 @@ palette <- pal_palette(
     "#387ECF", "#FDBB30"
   )
 )
+
+# Check if the 's3_bucket' environment variable is set
+s3_bucket <- Sys.getenv("s3_bucket")
+
+# Stop the script if 's3_bucket' is not defined
+if (s3_bucket == "") {
+  stop("Environment variable 's3_bucket' must be defined in your .Renviron file for this code to work. Please update 's3_bucket' in .Renviron and try again.")
+}
+
 ```
 
 ```{=html}
@@ -216,7 +227,17 @@ data_all <- read_csv(
 data <- data_all %>%
   filter(legislation != "Chicago General Obligation Bond")
 
-write_csv(data_all, here("data/intermediate_data", "clean_data_dashboard.csv"))
+# Set the intermediate folder
+intermediate_path <- here("data/intermediate_data")
+
+# Check if the intermediate folder exists
+if (!file.exists(intermediate_path)) {
+  # If it doesn't exist, create it
+  dir.create(intermediate_path, recursive = TRUE)
+}
+
+# Write the CSV file to the directory
+write_csv(data_all, file.path(intermediate_path, "clean_data_dashboard.csv"))
 ```
 
 ```{r calculate-appropriations, include=FALSE}
@@ -527,7 +548,6 @@ allocations_vs_spending <-
 xaringanExtra::use_panelset()
 ```
 
-`r sknifedatar::automagic_tabs(input_data = allocations_vs_spending, panel_name = "geography", .output = "plots", tabset_props = ".tabset-pills", is_output_distill = FALSE, fig.width=10, fig.height=6,fig.cap="This graph compares the percent of ARPA SLFRF dollars by policy topic between the original recovery plan and spending to date")`
 
 ## Gap Between Allocations and Adopted Budget
 
@@ -831,7 +851,6 @@ nested_data <-
 xaringanExtra::use_panelset()
 ```
 
-`r sknifedatar::automagic_tabs(input_data = nested_data, panel_name = "geography", .output = "ts_plots", tabset_props = ".tabset-pills", is_output_distill = FALSE, fig.width=10, fig.height=6)`
 
 # Explore Funding by Policy Area {.tabset .tabset-dropdown}
 
