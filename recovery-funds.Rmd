@@ -571,7 +571,7 @@ budget_gap_long <- budget_gap |>
   pivot_longer(c(adopted_budget_per_treasury_report, allocation))
 ```
 
-### Option A: {.tabset .tabset-pills}
+### {.tabset .tabset-pills}
 
 #### Chicago
 
