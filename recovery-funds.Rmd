@@ -584,7 +584,7 @@ budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
 
 p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
   geom_col(aes(text = paste("Original allocation: ", allocation, 
-                            "<br>Current spending: ", adopted_budget_per_treasury_report, 
+                            "<br>Adopted budget: ", adopted_budget_per_treasury_report, 
                             "<br>Difference between allocation and adopted budget: ", budget_to_allocation_gap,
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
@@ -615,7 +615,7 @@ budget_gap_long_filter <- filter(budget_gap_long, geography == "Cook County")
 
 p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
   geom_col(aes(text = paste("Original Allocation: ", allocation, 
-                            "<br>Current Spending: ", adopted_budget_per_treasury_report, 
+                            "<br>Adopted budget: ", adopted_budget_per_treasury_report, 
                             "<br>Difference between allocation and adopted budget: ", budget_to_allocation_gap,
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
@@ -645,7 +645,7 @@ budget_gap_long_filter <- filter(budget_gap_long, geography == "Illinois")
 
 p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
   geom_col(aes(text = paste("Original Allocation: ", allocation, 
-                            "<br>Current Spending: ", adopted_budget_per_treasury_report, 
+                            "<br>Adopted budget: ", adopted_budget_per_treasury_report, 
                             "<br>Difference between allocation and adopted budget: ", budget_to_allocation_gap,
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
