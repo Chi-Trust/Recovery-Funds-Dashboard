@@ -692,17 +692,6 @@ ggplot(budget_gap_filter, aes(y = topic)) +
 ```
 
 
-### Illinois
-
-```{r fig.width = 10, fig.height = 6}
-data_filter <- data %>% 
-  filter(geography == "Illinois", !is.na(allocation),
-         legislation == "ARPA State and Local Fiscal Recovery Funds") %>%
-  select(legislation, program, topic, subtopic, allocation, total_cumulative_expenditures) 
-
-plot_difference_in_allocation_vs_spending(data_filter)
-```
-
 ## Percent of obligated funds spent {.tabset .tabset-pills}
 
 ```{r fig.width = 10}
