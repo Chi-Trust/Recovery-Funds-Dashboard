@@ -685,8 +685,8 @@ plot_expended_slfrf <- function(.data, geography) {
       mapping = aes(
         x = reorder(topic, pct_expended),
         y = pct_expended,
-        text = paste("Original Allocation: ", adopted_budget_per_treasury_report, 
-                     "<br>Current Spending: ", total_cumulative_expenditures, 
+        text = paste("Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                     "<br>Current Spending: ", scales::dollar(total_cumulative_expenditures), 
                      "<br>Difference: ", difference)
       ),
       fill = "#47c3d3"
