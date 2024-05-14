@@ -487,7 +487,7 @@ plot_funds_by_geo_topic(data_filter, "legislation")
 
 # Explore ARPA State and Local Fiscal Recovery Funds Spending
 
-## Current Spending Compared to Original Allocations {.tabset .tabset-pills}
+## {.tabset .tabset-pills}
 
 ```{r c4}
 plot_difference_in_allocation_vs_spending <- function(data, geography) {
