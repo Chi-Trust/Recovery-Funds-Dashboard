@@ -665,34 +665,6 @@ Placeholder text: Some geographies are all negative for Reasons. Capacity buildi
 ## Adopted Funds Spent by Topic {.tabset .tabset-pills}
 
 ```{r, pct-slfrf-expended}
-# plot_expended_slfrf <- function(.data, geography) {
-#   .data |>
-#     filter(legislation == "ARPA State and Local Fiscal Recovery Funds") |>
-#     mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report) |>
-#     summarise(
-#       across(
-#         .cols = c(total_cumulative_expenditures, adopted_budget_per_treasury_report),
-#         .fns = ~ sum(.x, na.rm = TRUE)
-#       ),
-#       .by = c("geography", "topic")
-#     ) |>
-#     mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report) |>
-#     filter(geography == {{ geography }}) |>
-#     ggplot() +
-#     geom_col(
-#       mapping = aes(
-#         x = reorder(topic, pct_expended),
-#         y = pct_expended
-#       ),
-#       fill = "#47c3d3"
-#     ) +
-#     coord_flip() +
-#     scale_y_continuous(labels = scales::label_percent()) +
-#     labs(
-#       x = NULL,
-#       y = NULL
-#     )
-# }
 
 plot_expended_slfrf <- function(.data, geography) {
   .data |>
