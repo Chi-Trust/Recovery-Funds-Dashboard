@@ -726,6 +726,35 @@ ggplot(budget_gap_filter, aes(y = topic)) +
 ## Adopted Funds Spent by Topic {.tabset .tabset-pills}
 
 ```{r, pct-slfrf-expended}
+# plot_expended_slfrf <- function(.data, geography) {
+#   .data |>
+#     filter(legislation == "ARPA State and Local Fiscal Recovery Funds") |>
+#     mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report) |>
+#     summarise(
+#       across(
+#         .cols = c(total_cumulative_expenditures, adopted_budget_per_treasury_report),
+#         .fns = ~ sum(.x, na.rm = TRUE)
+#       ),
+#       .by = c("geography", "topic")
+#     ) |>
+#     mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report) |>
+#     filter(geography == {{ geography }}) |>
+#     ggplot() +
+#     geom_col(
+#       mapping = aes(
+#         x = reorder(topic, pct_expended),
+#         y = pct_expended
+#       ),
+#       fill = "#47c3d3"
+#     ) +
+#     coord_flip() +
+#     scale_y_continuous(labels = scales::label_percent()) +
+#     labs(
+#       x = NULL,
+#       y = NULL
+#     )
+# }
+
 plot_expended_slfrf <- function(.data, geography) {
   .data |>
     filter(legislation == "ARPA State and Local Fiscal Recovery Funds") |>
@@ -737,22 +766,28 @@ plot_expended_slfrf <- function(.data, geography) {
       ),
       .by = c("geography", "topic")
     ) |>
-    mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report) |>
+    mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report,
+           difference = adopted_budget_per_treasury_report - total_cumulative_expenditures) |>
     filter(geography == {{ geography }}) |>
     ggplot() +
     geom_col(
       mapping = aes(
         x = reorder(topic, pct_expended),
-        y = pct_expended
+        y = pct_expended,
+        text = paste("Original Allocation: ", adopted_budget_per_treasury_report, 
+                     "<br>Current Spending: ", total_cumulative_expenditures, 
+                     "<br>Difference: ", difference)
       ),
       fill = "#47c3d3"
     ) +
     coord_flip() +
-    scale_y_continuous(labels = scales::label_percent()) +
+    scale_y_continuous(labels = scales::label_percent(), limits = c(0, 1.1)) +
     labs(
       x = NULL,
       y = NULL
-    )
+    ) -> p
+
+  ggplotly(p, tooltip = "text", height = 450)
 }
 ```
 
@@ -761,18 +796,24 @@ plot_expended_slfrf <- function(.data, geography) {
 ```{r, fig.width = 10, fig.height = 6}
 plot_expended_slfrf(data, "Chicago")
 ```
+Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
+<br> <br>
 
 ### Cook County
 
 ```{r, fig.width = 10, fig.height = 6}
 plot_expended_slfrf(data, "Cook County")
 ```
+Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
+<br> <br>
 
 ### Illinois
 
 ```{r, fig.width = 10, fig.height = 6}
 plot_expended_slfrf(data, "Illinois")
 ```
+Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
+<br> <br>
 
 ## Spending by Quarter {.tabset .tabset-pills}
 
