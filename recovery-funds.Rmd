@@ -583,9 +583,9 @@ budget_gap_filter <- filter(budget_gap, geography == "Chicago") %>%
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
 
 p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col(aes(text = paste("Original allocation: ", allocation, 
-                            "<br>Adopted budget: ", adopted_budget_per_treasury_report, 
-                            "<br>Difference between allocation and adopted budget: ", budget_to_allocation_gap,
+  geom_col(aes(text = paste("Original allocation: ", scales::dollar(allocation), 
+                            "<br>Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                            "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
     limits = c(-500000000, 500000000),
@@ -614,9 +614,9 @@ budget_gap_filter <- filter(budget_gap, geography == "Cook County") %>%
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Cook County")
 
 p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col(aes(text = paste("Original Allocation: ", allocation, 
-                            "<br>Adopted budget: ", adopted_budget_per_treasury_report, 
-                            "<br>Difference between allocation and adopted budget: ", budget_to_allocation_gap,
+  geom_col(aes(text = paste("Original Allocation: ", scales::dollar(allocation), 
+                            "<br>Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                            "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
     limits = c(-500000000, 500000000),
@@ -644,9 +644,9 @@ budget_gap_filter <- filter(budget_gap, geography == "Illinois") %>%
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Illinois")
 
 p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col(aes(text = paste("Original Allocation: ", allocation, 
-                            "<br>Adopted budget: ", adopted_budget_per_treasury_report, 
-                            "<br>Difference between allocation and adopted budget: ", budget_to_allocation_gap,
+  geom_col(aes(text = paste("Original Allocation: ", scales::dollar(allocation), 
+                            "<br>Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                            "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
     limits = c(-5000000000, 5000000000),
@@ -656,8 +656,6 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
     )
   ) +
   labs(y = NULL, x = "(Millions)")
-
-#p
 
 ggplotly(p, tooltip = "text", height = 450)
 ```
