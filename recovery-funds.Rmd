@@ -655,43 +655,6 @@ ggplotly(p, tooltip = "text", height = 450)
 **Note:** Percentages may be greater than 100 percent for Reasons.
 <br> <br>
 
-### Option B: {.tabset .tabset-pills}
-
-#### Chicago
-
-```{r, fig.width=10, fig.height=6}
-# TODO: ADD DATA LABELS https://r-graph-gallery.com/web-extended-dumbbell-plot-ggplot2.html
-
-budget_gap_filter <- filter(budget_gap, geography == "Chicago")
-budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
-
-ggplot(budget_gap_filter, aes(y = topic)) +
-  geom_dumbbell(aes(x = adopted_budget_per_treasury_report, xend = allocation),
-    dot_guide_size = 0.25, color = "darkgray", # Color of the line
-    size = 1, # Line width
-    dot_guide = FALSE, # Whether to add a guide from origin to X or not
-    size_x = 2, # Size of the X point
-    size_xend = 2, # Size of the X end point
-    color_x = "#387ECF", # Color of the X point
-    color_xend = "#FDBB30", # Color of the X end point
-    color = "#e3e2e1"
-  ) + # Color of the X end point
-  geom_point(data = budget_gap_long_filter, aes(x = value, color = name), size = 2) +
-  scale_color_manual(
-    name = "",
-    labels = c("Adopted Budget", "Allocation"),
-    values = c("#387ECF", "#FDBB30")
-  ) +
-  scale_x_continuous(labels = scales::label_currency(scale = 1 / 1e6)) +
-  facet_wrap(. ~ geography, nrow = 3) +
-  theme(legend.position = "bottom") +
-  labs(
-    x = "(Millions)",
-    y = NULL
-  )
-```
-
-
 ## Percent of obligated funds spent {.tabset .tabset-pills}
 
 ```{r fig.width = 10}
