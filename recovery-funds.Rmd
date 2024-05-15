@@ -51,7 +51,7 @@ librarian::shelf(
   palettes,
   xaringanExtra,
   dotenv,
-  sknifedatar
+  purrr
 )
 
 # Urban theme settings
@@ -729,77 +729,75 @@ Placeholder text: Explanation for chart difference between adopted budget vs. al
 ## Spending by Quarter {.tabset .tabset-pills}
 
 ```{r read-quarterly-data}
-data_ts <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) |>
-  janitor::clean_names() |>
-  mutate(dashboard_topic = if_else(dashboard_topic == "Household Investements", "Household Investment", dashboard_topic)) |>
-  mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) |>
-  filter(completion_status != "Cancelled") |>
-  # filter out ARPA flexible funds because captured elsewhere
+# Read and prepare the data
+data_ts <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) %>%
+  clean_names() %>%
+  mutate(dashboard_topic = if_else(dashboard_topic == "Household Investements", "Household Investment", dashboard_topic)) %>%
+  mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
+  filter(completion_status != "Cancelled") %>%
   select(
     date = report_period, geography, agency,
     topic = dashboard_topic,
     subtopic = dashboard_subtopic, adopted_budget, matches("total"), matches("percent"),
     matches("expenditure")
-  ) |>
-  mutate(date = as.yearqtr(date, format = "%Y-Q%q")) |>
+  ) %>%
+  mutate(date = as.yearqtr(date, format = "%Y-Q%q")) %>%
   summarise(
     across(
       c(total_obligations, total_expenditures, adopted_budget),
       ~ sum(.x, na.rm = TRUE)
     ),
     .by = c("geography", "date", "topic")
-  ) |>
+  ) %>%
   mutate(
     pct_expended_budget = total_expenditures / adopted_budget,
     pct_expended_obligations = total_expenditures / total_obligations
-  ) |>
+  ) %>%
   drop_na(topic)
 
+# Define custom color palette
+custom_colors <- c("#47c3d3", "#C1D82F", "#6C5893", "#000000", "#387ECF", "#FDBB30")
+
+# Plot function with custom colors and fixed axis
 plot_spending_by_quarter <- function(.data, geography) {
-  .data |>
+  .data %>%
     ggplot(aes(x = date, y = pct_expended_budget, color = topic)) +
     geom_line(size = 1, alpha = 0.9) +
-    zoo::scale_x_yearqtr(
-      format = "%Y-Q%q",
-      breaks = seq(from = min(data_ts$date), to = max(data_ts$date), by = 0.25)
-    ) +
     geom_point(alpha = 0.9) +
-    scale_y_continuous(labels = scales::label_percent()) +
-    # scale_color_palette_d(palette$cct) +
-    labs(x = NULL, y = NULL) +
+    scale_x_yearqtr(format = "%Y-Q%q", breaks = seq(from = min(data_ts$date), to = max(data_ts$date), by = 0.25)) +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2), labels = scales::label_percent()) +
+    scale_color_manual(values = custom_colors) +
+    labs(x = NULL, y = NULL, color = NULL) +  # Remove 'color' legend title
     guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
+    theme_minimal() +
     theme(
-      text = element_text(
-        family = "Merriweather",
-        face = "plain",
-        colour = "#000000",
-        size = 8.5,
-        hjust = 0.5,
-        vjust = 0.5,
-        angle = 0,
-        lineheight = 0.9,
-        margin = ggplot2::margin(),
-        debug = FALSE
-      ),
-      plot.caption.position = "plot",
-      plot.caption = element_text(hjust = 0)
+      text = element_text(size = 14),
+      legend.position = "bottom"
     )
 }
 
+# Nest and prepare for tabs
 nested_data <-
-  data_ts |>
-  select(geography, date, topic, pct_expended_budget) |>
-  arrange(geography) |>
-  nest(.by = c(geography), .key = "ts") |>
-  mutate(ts_plots = map(
-    ts,
-    ~ plot_spending_by_quarter(.x)
-  ))
+  data_ts %>%
+  select(geography, date, topic, pct_expended_budget) %>%
+  arrange(geography) %>%
+  nest(.by = c(geography), .key = "ts") %>%
+  mutate(ts_plots = map(ts, ~ plot_spending_by_quarter(.x)))
 ```
 
 ```{r}
 xaringanExtra::use_panelset()
 ```
+
+<div class="tabset">
+<!-- Tab for each geography -->
+```{r qtr_loop, echo=FALSE, results='asis', fig.width=10, fig.height=6}
+for (geo in unique(nested_data$geography)) {
+  cat('\n\n### ', geo, '\n')
+  print(nested_data$ts_plots[[which(nested_data$geography == geo)]])
+}
+```
+</div>
 
 
 # Explore Funding by Policy Area {.tabset .tabset-dropdown}
