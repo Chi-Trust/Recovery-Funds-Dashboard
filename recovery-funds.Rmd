@@ -2822,13 +2822,21 @@ total_chicago <- era_data %>%
   summarise(total_funds = sum(total_funds, na.rm = TRUE)) %>%
   pull(total_funds)
 
+era_date <- data %>%
+  filter(
+    program == "Emergency Rental Housing Assistance (ERA2)",
+    geography == "Chicago"
+  ) %>%
+  mutate(era_date_fmt=ymd(current_as_of)) %>%
+  pull(era_date_fmt)
+
 make_sum_table(
   "Emergency Rental Assistance Program",
   "Chicago",
   total_program,
   total_cook,
   total_chicago,
-  "2021-12-31"
+  era_date
 )
 ```
 
@@ -2856,20 +2864,29 @@ leaflet_grid
 ## ARPA SLFRF
 
 ```{r ARPA SLFRF summary table}
-total_program <- data %>%
-  filter(
-    program == "Emergency Rental Housing Assistance (ERA2)",
-    geography == "Chicago"
-  ) %>%
-  pull(allocation)
+total_program <- zip_data %>%
+  summarise(total_award_amount = sum(award_amount, na.rm = TRUE)) %>%
+  pull(total_award_amount)
+
+total_chicago <- total_program
+
+# Need to set total_cook equal to total_chicago for the subtraction in the function
+total_cook <- total_chicago
+
+arpa_slfrf_date <- read_excel(here("data/zip_data.xlsx")) %>%
+  janitor::clean_names() %>%
+  mutate(award_date_fmt=ymd(award_date)) %>%
+  arrange(desc(award_date)) %>%
+  slice(1) %>%
+  pull(award_date_fmt)
 
 make_sum_table(
-  "ARPA SLFRF",
+  "Chicago ARPA SLFRF",
   "Chicago",
   total_program,
-  total_funding,
+  total_cook,
   total_chicago,
-  "1900-01-01"
+  arpa_slfrf_date
 )
 ```
 
