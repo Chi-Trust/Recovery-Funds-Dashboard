@@ -487,7 +487,7 @@ plot_funds_by_geo_topic(data_filter, "legislation")
 
 # Explore ARPA State and Local Fiscal Recovery Funds Spending
 
-## Current Spending Compared to Original Allocations {.tabset .tabset-pills}
+## {.tabset .tabset-pills}
 
 ```{r c4}
 plot_difference_in_allocation_vs_spending <- function(data, geography) {
@@ -571,163 +571,101 @@ budget_gap_long <- budget_gap |>
   pivot_longer(c(adopted_budget_per_treasury_report, allocation))
 ```
 
-### Option A: {.tabset .tabset-pills}
+### {.tabset .tabset-pills}
 
 #### Chicago
 
 ```{r c7, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Chicago")
+
+budget_gap_filter <- filter(budget_gap, geography == "Chicago") %>%
+  mutate(percent_difference = (adopted_budget_per_treasury_report - allocation) / allocation * 100)
+
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
 
-ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col() +
-  scale_x_continuous(labels = scales::label_dollar(
-    scale = 1 / 1e6,
-    accuracy = 0.1
-  )) +
+p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col(aes(text = paste("Original allocation: ", scales::dollar(allocation), 
+                            "<br>Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                            "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
+                            "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
+  scale_x_continuous(
+    limits = c(-500000000, 500000000),
+    labels = scales::label_dollar(
+      scale = 1 / 1e6,
+      accuracy = 0.1
+    )
+  ) +
   labs(y = NULL, x = "(Millions)")
+
+#p
+
+ggplotly(p, tooltip = "text", height = 450)
+
 ```
+Placeholder text: Some geographies are all negative for Reasons. Capacity building topic doesn't show up for Reasons. 
+<br> <br>
 
 #### Cook County
 
 ```{r, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Cook County")
+
+budget_gap_filter <- filter(budget_gap, geography == "Cook County") %>%
+  mutate(percent_difference = (adopted_budget_per_treasury_report - allocation) / allocation * 100)
+
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Cook County")
 
-ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col() +
-  scale_x_continuous(labels = scales::label_dollar(
-    scale = 1 / 1e6,
-    accuracy = 0.1
-  )) +
+p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col(aes(text = paste("Original Allocation: ", scales::dollar(allocation), 
+                            "<br>Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                            "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
+                            "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
+  scale_x_continuous(
+    limits = c(-500000000, 500000000),
+    labels = scales::label_dollar(
+      scale = 1 / 1e6,
+      accuracy = 0.1
+    )
+  ) +
   labs(y = NULL, x = "(Millions)")
+
+#p
+
+ggplotly(p, tooltip = "text", height = 450)
 ```
+Placeholder text: Some geographies are all negative for Reasons. Capacity building topic doesn't show up for Reasons. 
+<br> <br>
 
 #### Illinois
 
 ```{r, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Illinois")
+
+budget_gap_filter <- filter(budget_gap, geography == "Illinois") %>%
+  mutate(percent_difference = (adopted_budget_per_treasury_report - allocation) / allocation * 100)
+
 budget_gap_long_filter <- filter(budget_gap_long, geography == "Illinois")
 
-ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
-  geom_col() +
-  scale_x_continuous(labels = scales::label_dollar(
-    scale = 1 / 1e6,
-    accuracy = 0.1
-  )) +
+p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
+  geom_col(aes(text = paste("Original Allocation: ", scales::dollar(allocation), 
+                            "<br>Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                            "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
+                            "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
+  scale_x_continuous(
+    limits = c(-5000000000, 5000000000),
+    labels = scales::label_dollar(
+      scale = 1 / 1e6,
+      accuracy = 0.1
+    )
+  ) +
   labs(y = NULL, x = "(Millions)")
+
+ggplotly(p, tooltip = "text", height = 450)
 ```
-
-### Option B: {.tabset .tabset-pills}
-
-#### Chicago
-
-```{r, fig.width=10, fig.height=6}
-# TODO: ADD DATA LABELS https://r-graph-gallery.com/web-extended-dumbbell-plot-ggplot2.html
-
-budget_gap_filter <- filter(budget_gap, geography == "Chicago")
-budget_gap_long_filter <- filter(budget_gap_long, geography == "Chicago")
-
-ggplot(budget_gap_filter, aes(y = topic)) +
-  geom_dumbbell(aes(x = adopted_budget_per_treasury_report, xend = allocation),
-    dot_guide_size = 0.25, color = "darkgray", # Color of the line
-    size = 1, # Line width
-    dot_guide = FALSE, # Whether to add a guide from origin to X or not
-    size_x = 2, # Size of the X point
-    size_xend = 2, # Size of the X end point
-    color_x = "#387ECF", # Color of the X point
-    color_xend = "#FDBB30", # Color of the X end point
-    color = "#e3e2e1"
-  ) + # Color of the X end point
-  geom_point(data = budget_gap_long_filter, aes(x = value, color = name), size = 2) +
-  scale_color_manual(
-    name = "",
-    labels = c("Adopted Budget", "Allocation"),
-    values = c("#387ECF", "#FDBB30")
-  ) +
-  scale_x_continuous(labels = scales::label_currency(scale = 1 / 1e6)) +
-  facet_wrap(. ~ geography, nrow = 3) +
-  theme(legend.position = "bottom") +
-  labs(
-    x = "(Millions)",
-    y = NULL
-  )
-```
-
-
-### Illinois
-
-```{r fig.width = 10, fig.height = 6}
-data_filter <- data %>% 
-  filter(geography == "Illinois", !is.na(allocation),
-         legislation == "ARPA State and Local Fiscal Recovery Funds") %>%
-  select(legislation, program, topic, subtopic, allocation, total_cumulative_expenditures) 
-
-plot_difference_in_allocation_vs_spending(data_filter)
-```
-
-## Percent of obligated funds spent {.tabset .tabset-pills}
-
-```{r fig.width = 10}
-
-obligated_funds_by_geo <- function(geo){
-  
-  #cat("### ", geo, "\n")
-data_all %>%
-    filter(geography == {{geo}}) %>% 
-  mutate(pct_obligated_funds_spent = total_cumulative_expenditures / adopted_budget_per_treasury_report) %>% 
-  select(geography, legislation, topic, subtopic, pct_obligated_funds_spent) %>% 
-  mutate(pct_obligated_funds_spent = scales::percent(round(pct_obligated_funds_spent, 2))) %>% 
-  DT::datatable(width = "250px",
-                colnames = c("Jurisdiction" = "geography",
-                             "Legislation" = "legislation",
-                             "Topic" = "topic",
-                             "Subtopic" = "subtopic",
-                             "Percentage of obligated funds spent" = "pct_obligated_funds_spent"),
-                 options = list(dom = 't', 
-                               autoWidth = TRUE,
-                               ordering = FALSE, 
-                               columnDefs = list(list(width = '190px', targets = c(0)), 
-                                                 list(width = '60px', targets = c(1))))) %>%
-   DT::formatStyle(columns = c(1, 2), fontSize = '9pt')
-}
-```
-
-#### Illinois
-
-```{r, fig.width=10, fig.height=6}
-budget_gap_filter <- filter(budget_gap, geography == "Illinois")
-budget_gap_long_filter <- filter(budget_gap_long, geography == "Illinois")
-
-ggplot(budget_gap_filter, aes(y = topic)) +
-  geom_dumbbell(aes(x = adopted_budget_per_treasury_report, xend = allocation),
-    dot_guide_size = 0.25, color = "darkgray", # Color of the line
-    size = 1, # Line width
-    dot_guide = FALSE, # Whether to add a guide from origin to X or not
-    size_x = 3, # Size of the X point
-    size_xend = 3, # Size of the X end point
-    color_x = "#387ECF", # Color of the X point
-    color_xend = "#FDBB30", # Color of the X end point
-    color = "#e3e2e1"
-  ) + # Color of the X end point
-  geom_point(data = budget_gap_long_filter, aes(x = value, color = name), size = 2) +
-  scale_color_manual(
-    name = "",
-    labels = c("Adopted Budget", "Allocation"),
-    values = c("#387ECF", "#FDBB30")
-  ) +
-  scale_x_continuous(labels = scales::label_currency(scale = 1 / 1e6)) +
-  facet_wrap(. ~ geography, nrow = 3) +
-  theme(legend.position = "bottom") +
-  labs(
-    x = "(Millions)",
-    y = NULL
-  )
-```
+Placeholder text: Some geographies are all negative for Reasons. Capacity building topic doesn't show up for Reasons. 
+<br> <br>
 
 ## Adopted Funds Spent by Topic {.tabset .tabset-pills}
 
 ```{r, pct-slfrf-expended}
+
 plot_expended_slfrf <- function(.data, geography) {
   .data |>
     filter(legislation == "ARPA State and Local Fiscal Recovery Funds") |>
@@ -739,22 +677,28 @@ plot_expended_slfrf <- function(.data, geography) {
       ),
       .by = c("geography", "topic")
     ) |>
-    mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report) |>
+    mutate(pct_expended = total_cumulative_expenditures / adopted_budget_per_treasury_report,
+           difference = adopted_budget_per_treasury_report - total_cumulative_expenditures) |>
     filter(geography == {{ geography }}) |>
     ggplot() +
     geom_col(
       mapping = aes(
         x = reorder(topic, pct_expended),
-        y = pct_expended
+        y = pct_expended,
+        text = paste("Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
+                     "<br>Current Spending: ", scales::dollar(total_cumulative_expenditures), 
+                     "<br>Difference: ", difference)
       ),
       fill = "#47c3d3"
     ) +
     coord_flip() +
-    scale_y_continuous(labels = scales::label_percent()) +
+    scale_y_continuous(labels = scales::label_percent(), limits = c(0, 1.1), breaks = seq(0, 1.1, by = 0.2)) +
     labs(
       x = NULL,
       y = NULL
-    )
+    ) -> p
+
+  ggplotly(p, tooltip = "text", height = 450)
 }
 ```
 
@@ -763,18 +707,24 @@ plot_expended_slfrf <- function(.data, geography) {
 ```{r, fig.width = 10, fig.height = 6}
 plot_expended_slfrf(data, "Chicago")
 ```
+Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
+<br> <br>
 
 ### Cook County
 
 ```{r, fig.width = 10, fig.height = 6}
 plot_expended_slfrf(data, "Cook County")
 ```
+Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
+<br> <br>
 
 ### Illinois
 
 ```{r, fig.width = 10, fig.height = 6}
 plot_expended_slfrf(data, "Illinois")
 ```
+Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
+<br> <br>
 
 ## Spending by Quarter {.tabset .tabset-pills}
 
@@ -2904,6 +2854,24 @@ leaflet_grid
 ```
 
 ## ARPA SLFRF
+
+```{r ARPA SLFRF summary table}
+total_program <- data %>%
+  filter(
+    program == "Emergency Rental Housing Assistance (ERA2)",
+    geography == "Chicago"
+  ) %>%
+  pull(allocation)
+
+make_sum_table(
+  "ARPA SLFRF",
+  "Chicago",
+  total_program,
+  total_funding,
+  total_chicago,
+  "1900-01-01"
+)
+```
 
 ```{r}
 make_leaflet_arpa <- function(chicago_zip_totals, col_breaks) {
