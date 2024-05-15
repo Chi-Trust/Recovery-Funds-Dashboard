@@ -687,7 +687,7 @@ plot_expended_slfrf <- function(.data, geography) {
         y = pct_expended,
         text = paste("Adopted budget: ", scales::dollar(adopted_budget_per_treasury_report), 
                      "<br>Current Spending: ", scales::dollar(total_cumulative_expenditures), 
-                     "<br>Difference: ", difference)
+                     "<br>Difference: ", scales::dollar(difference))
       ),
       fill = "#47c3d3"
     ) +
@@ -2861,7 +2861,7 @@ leaflet_grid <- tagList(list(
 leaflet_grid
 ```
 
-## ARPA SLFRF
+## Chicago ARPA SLFRF
 
 ```{r ARPA SLFRF summary table}
 total_program <- zip_data %>%
@@ -2881,7 +2881,7 @@ arpa_slfrf_date <- read_excel(here("data/zip_data.xlsx")) %>%
   pull(award_date_fmt)
 
 make_sum_table(
-  "Chicago ARPA SLFRF",
+  "ARPA SLFRF",
   "Chicago",
   total_program,
   total_cook,
