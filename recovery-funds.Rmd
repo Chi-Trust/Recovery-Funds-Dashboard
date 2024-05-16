@@ -749,11 +749,19 @@ data_ts <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) %>%
     ),
     .by = c("geography", "date", "topic")
   ) %>%
-  mutate(
-    pct_expended_budget = total_expenditures / adopted_budget,
-    pct_expended_obligations = total_expenditures / total_obligations
-  ) %>%
-  drop_na(topic)
+  # mutate(
+  #   pct_expended_budget = total_expenditures / adopted_budget,
+  #   pct_expended_obligations = total_expenditures / total_obligations
+  # ) %>%
+  drop_na(topic) %>%
+  arrange(geography,topic,date) %>%
+  group_by(geography, topic) %>%
+  mutate(agg_expenditures = cumsum(total_expenditures),
+         agg_budget = cumsum(adopted_budget),
+         agg_obligations = cumsum(total_obligations)) %>%
+  ungroup() %>%
+  mutate(pct_expended_budget = agg_expenditures / agg_budget,
+         pct_expended_obligations = agg_expenditures / agg_obligations )
 
 # Define custom color palette
 custom_colors <- c("#47c3d3", "#C1D82F", "#6C5893", "#000000", "#387ECF", "#FDBB30")
