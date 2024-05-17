@@ -730,38 +730,98 @@ Placeholder text: Explanation for chart difference between adopted budget vs. al
 
 ```{r read-quarterly-data}
 # Read and prepare the data
-data_ts <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) %>%
-  clean_names() %>%
-  mutate(dashboard_topic = if_else(dashboard_topic == "Household Investements", "Household Investment", dashboard_topic)) %>%
+# data_ts <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) %>%
+#   clean_names() %>%
+#   mutate(dashboard_topic = if_else(dashboard_topic == "Household Investements", "Household Investment", dashboard_topic)) %>%
+#   mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
+#   filter(completion_status != "Cancelled") %>%
+#   select(
+#     date = report_period, geography, agency,
+#     topic = dashboard_topic,
+#     subtopic = dashboard_subtopic, adopted_budget, matches("total"), matches("percent"),
+#     matches("expenditure")
+#   ) %>%
+#   mutate(date = as.yearqtr(date, format = "%Y-Q%q")) %>%
+#   summarise(
+#     across(
+#       c(total_obligations, total_expenditures, adopted_budget),
+#       ~ sum(.x, na.rm = TRUE)
+#     ),
+#     .by = c("geography", "date", "topic")
+#   ) %>%
+#   mutate(
+#     pct_expended_budget = total_expenditures / adopted_budget,
+#     pct_expended_obligations = total_expenditures / total_obligations
+#   ) %>%
+#   drop_na(topic) 
+# 
+
+
+ts_data_in <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) %>%
+  clean_names()
+
+ts_data <- ts_data_in %>%
+  filter(completion_status != "Cancelled")  %>%
   mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
-  filter(completion_status != "Cancelled") %>%
-  select(
-    date = report_period, geography, agency,
-    topic = dashboard_topic,
-    subtopic = dashboard_subtopic, adopted_budget, matches("total"), matches("percent"),
-    matches("expenditure")
-  ) %>%
-  mutate(date = as.yearqtr(date, format = "%Y-Q%q")) %>%
-  summarise(
-    across(
-      c(total_obligations, total_expenditures, adopted_budget),
-      ~ sum(.x, na.rm = TRUE)
-    ),
-    .by = c("geography", "date", "topic")
-  ) %>%
-  # mutate(
-  #   pct_expended_budget = total_expenditures / adopted_budget,
-  #   pct_expended_obligations = total_expenditures / total_obligations
-  # ) %>%
-  drop_na(topic) %>%
-  arrange(geography,topic,date) %>%
-  group_by(geography, topic) %>%
-  mutate(agg_expenditures = cumsum(total_expenditures),
-         agg_budget = cumsum(adopted_budget),
-         agg_obligations = cumsum(total_obligations)) %>%
-  ungroup() %>%
-  mutate(pct_expended_budget = agg_expenditures / agg_budget,
-         pct_expended_obligations = agg_expenditures / agg_obligations )
+  arrange(project_name, desc(report_period)) %>%
+  mutate(dashboard_topic = case_when(
+    dashboard_topic %in% c("Household Investements", "Household Investment") ~ "Household Investments",
+    TRUE ~ dashboard_topic
+  ))
+
+
+# Create a sorted list of unique report periods
+report_period_levels <- sort(unique(ts_data$report_period))
+
+# Convert report_period to an ordered factor with dynamic levels
+ts_data$report_period <- factor(ts_data$report_period, levels = report_period_levels, ordered = TRUE)
+
+# Create a complete data frame with all potential report periods for each project
+all_periods <- expand.grid(project_name = unique(ts_data$project_name), 
+                           report_period = factor(report_period_levels, levels = report_period_levels, ordered = TRUE))
+
+# Merge with the original data to find missing periods
+ts_merged_data <- left_join(all_periods, ts_data, by = c("project_name", "report_period"))
+
+# Function to fill in missing periods with the most recent available data
+fill_missing_periods <- function(df) {
+  df <- df %>%
+    arrange(report_period) %>%
+    fill(total_expenditures, geography, dashboard_topic, .direction = "down") %>%
+    filter(!is.na(total_expenditures))
+  return(df)
+}
+
+# Apply the function to each project
+ts_filled_data <- ts_merged_data %>%
+  group_by(project_name) %>%
+  group_modify(~ fill_missing_periods(.x)) %>%
+  ungroup() %>%  
+  select(project_name, geography, report_period, total_expenditures, dashboard_topic) %>%
+  group_by(dashboard_topic, geography, report_period) %>%
+  summarize(total_expenditures = sum(total_expenditures, na.rm = TRUE), .groups = 'drop') %>%
+  arrange(geography, dashboard_topic, report_period)
+
+
+dashboard_topic_budgets <- ts_data_in %>%
+  mutate(dashboard_topic = case_when(
+    dashboard_topic %in% c("Household Investements", "Household Investment") ~ "Household Investments",
+    TRUE ~ dashboard_topic
+  )) %>%
+  filter(completion_status != "Cancelled")  %>%
+  mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
+  distinct(project_name, .keep_all = TRUE) %>%
+  select(project_name, geography, adopted_budget, dashboard_topic) %>%
+  group_by(dashboard_topic, geography) %>%
+  summarise(total_adopted_budget = sum(adopted_budget, na.rm = TRUE)) %>%
+  drop_na(dashboard_topic) %>%
+  arrange(dashboard_topic, geography)
+
+
+data_ts <- left_join(ts_filled_data, dashboard_topic_budgets, by = c("dashboard_topic", "geography")) %>%
+  rename(topic = dashboard_topic) %>%
+  mutate(date = as.yearqtr(report_period, format = "%Y-Q%q")) %>%
+  mutate(pct_expended_budget = total_expenditures / total_adopted_budget) 
 
 # Define custom color palette
 custom_colors <- c("#47c3d3", "#C1D82F", "#6C5893", "#000000", "#387ECF", "#FDBB30")
