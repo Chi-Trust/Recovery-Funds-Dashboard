@@ -54,6 +54,8 @@ librarian::shelf(
   purrr
 )
 
+options(scipen = 999)
+
 # Urban theme settings
 set_urbn_defaults(style = "print", base_size = 12)
 
@@ -756,19 +758,24 @@ Placeholder text: Explanation for chart difference between adopted budget vs. al
 #   drop_na(topic) 
 # 
 
-
 ts_data_in <- readxl::read_excel(here("data", "arpa-spending-quarterly.xlsx")) %>%
-  clean_names()
+  clean_names() %>%
+  mutate(dashboard_project_name=str_to_title(dashboard_project_name),
+         project_name=str_to_title(project_name))
 
 ts_data <- ts_data_in %>%
-  filter(completion_status != "Cancelled")  %>%
-  mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
-  arrange(project_name, desc(report_period)) %>%
+  #Fix misspelled dashboard topics
   mutate(dashboard_topic = case_when(
     dashboard_topic %in% c("Household Investements", "Household Investment") ~ "Household Investments",
-    TRUE ~ dashboard_topic
-  ))
-
+    TRUE ~ dashboard_topic)) %>%
+  filter(completion_status != "Cancelled",
+         funding_source == "ARPA SLFRF")  %>%
+  mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
+  arrange(dashboard_project_name, desc(report_period)) %>%
+  #Replace missing dashboard_project_name
+  mutate(dashboard_project_name = if_else(is.na(dashboard_project_name), project_name, dashboard_project_name)) %>%
+  #Drop rows where project name is still missing
+  filter(!is.na(dashboard_project_name))
 
 # Create a sorted list of unique report periods
 report_period_levels <- sort(unique(ts_data$report_period))
@@ -777,11 +784,12 @@ report_period_levels <- sort(unique(ts_data$report_period))
 ts_data$report_period <- factor(ts_data$report_period, levels = report_period_levels, ordered = TRUE)
 
 # Create a complete data frame with all potential report periods for each project
-all_periods <- expand.grid(project_name = unique(ts_data$project_name), 
-                           report_period = factor(report_period_levels, levels = report_period_levels, ordered = TRUE))
+all_periods <- expand.grid(dashboard_project_name = unique(ts_data$dashboard_project_name), 
+                           report_period = factor(report_period_levels, levels = report_period_levels, ordered = TRUE)) %>%
+  arrange(dashboard_project_name, report_period) 
 
 # Merge with the original data to find missing periods
-ts_merged_data <- left_join(all_periods, ts_data, by = c("project_name", "report_period"))
+ts_merged_data <- left_join(all_periods, ts_data, by = c("dashboard_project_name", "report_period"))
 
 # Function to fill in missing periods with the most recent available data
 fill_missing_periods <- function(df) {
@@ -794,13 +802,17 @@ fill_missing_periods <- function(df) {
 
 # Apply the function to each project
 ts_filled_data <- ts_merged_data %>%
-  group_by(project_name) %>%
+  group_by(dashboard_project_name) %>%
   group_modify(~ fill_missing_periods(.x)) %>%
   ungroup() %>%  
-  select(project_name, geography, report_period, total_expenditures, dashboard_topic) %>%
+  select(dashboard_project_name, geography, report_period, total_expenditures, dashboard_topic) %>%
   group_by(dashboard_topic, geography, report_period) %>%
+  arrange(geography, dashboard_project_name, report_period) 
+
+ts_filled_summary <- ts_filled_data %>%
   summarize(total_expenditures = sum(total_expenditures, na.rm = TRUE), .groups = 'drop') %>%
   arrange(geography, dashboard_topic, report_period)
+  
 
 
 dashboard_topic_budgets <- ts_data_in %>%
@@ -808,20 +820,21 @@ dashboard_topic_budgets <- ts_data_in %>%
     dashboard_topic %in% c("Household Investements", "Household Investment") ~ "Household Investments",
     TRUE ~ dashboard_topic
   )) %>%
-  filter(completion_status != "Cancelled")  %>%
+  filter(completion_status != "Cancelled",
+         funding_source == "ARPA SLFRF")  %>%
   mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
-  distinct(project_name, .keep_all = TRUE) %>%
-  select(project_name, geography, adopted_budget, dashboard_topic) %>%
+  distinct(dashboard_project_name, .keep_all = TRUE) %>%
+  select(dashboard_project_name, geography, adopted_budget, dashboard_topic) %>%
   group_by(dashboard_topic, geography) %>%
   summarise(total_adopted_budget = sum(adopted_budget, na.rm = TRUE)) %>%
   drop_na(dashboard_topic) %>%
   arrange(dashboard_topic, geography)
 
 
-data_ts <- left_join(ts_filled_data, dashboard_topic_budgets, by = c("dashboard_topic", "geography")) %>%
+data_ts <- left_join(ts_filled_summary, dashboard_topic_budgets, by = c("dashboard_topic", "geography")) %>%
   rename(topic = dashboard_topic) %>%
   mutate(date = as.yearqtr(report_period, format = "%Y-Q%q")) %>%
-  mutate(pct_expended_budget = total_expenditures / total_adopted_budget) 
+  mutate(pct_expended_budget = total_expenditures / total_adopted_budget)
 
 # Define custom color palette
 custom_colors <- c("#47c3d3", "#C1D82F", "#6C5893", "#000000", "#387ECF", "#FDBB30")
