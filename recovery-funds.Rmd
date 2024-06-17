@@ -814,16 +814,16 @@ ts_filled_summary <- ts_filled_data %>%
   arrange(geography, dashboard_topic, report_period)
   
 
-
 dashboard_topic_budgets <- ts_data_in %>%
   mutate(dashboard_topic = case_when(
     dashboard_topic %in% c("Household Investements", "Household Investment") ~ "Household Investments",
-    TRUE ~ dashboard_topic
-  )) %>%
+    TRUE ~ dashboard_topic)) %>%
   filter(completion_status != "Cancelled",
          funding_source == "ARPA SLFRF")  %>%
   mutate(across(matches("total|expenditure|budget"), ~ as.numeric(.x))) %>%
-  distinct(dashboard_project_name, .keep_all = TRUE) %>%
+  group_by(dashboard_project_name) %>%
+  slice_max(report_period, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
   select(dashboard_project_name, geography, adopted_budget, dashboard_topic) %>%
   group_by(dashboard_topic, geography) %>%
   summarise(total_adopted_budget = sum(adopted_budget, na.rm = TRUE)) %>%
