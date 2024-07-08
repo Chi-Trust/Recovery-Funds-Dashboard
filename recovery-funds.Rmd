@@ -61,6 +61,7 @@ set_urbn_defaults(style = "print", base_size = 12)
 
 # Load Merriweather font
 uname <- "RPitingo"
+uname <- "astern"
 
 pc_font_path <- paste0("C:/Users/", uname, "/AppData/Local/Microsoft/Windows/Fonts/")
 mac_font_path <- "~/Library/Fonts"
@@ -536,8 +537,11 @@ plot_difference_in_allocation_vs_spending <- function(data, geography) {
   return(p)
 }
 
+arpa_slfrf_data <- data |>
+  filter(legislation == "ARPA State and Local Fiscal Recovery Funds")
+
 allocations_vs_spending <-
-  data |>
+  arpa_slfrf_data |>
   nest(.by = c(geography), .key = "data") |>
   mutate(plots = map(
     data,
@@ -555,7 +559,7 @@ xaringanExtra::use_panelset()
 
 ```{r c6}
 budget_gap <-
-  data |>
+  arpa_slfrf_data |>
   select(geography, legislation, topic, subtopic, allocation, adopted_budget_per_treasury_report) |>
   summarise(
     across(
@@ -590,7 +594,7 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
                             "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
-    limits = c(-500000000, 500000000),
+    limits = c(-50000000, 50000000),
     labels = scales::label_dollar(
       scale = 1 / 1e6,
       accuracy = 0.1
@@ -603,7 +607,7 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
 ggplotly(p, tooltip = "text", height = 450)
 
 ```
-Placeholder text: Some geographies are all negative for Reasons. Capacity building topic doesn't show up for Reasons. 
+Here, allocations refer to funds originally designated for specific uses in local government plans, such as Covid-19 recovery plans, many of which were drafted in 2021-2022. As community needs and government priorities shifted over time, program allocations may have also shifted, and may vary from the final dollar amount committed to in a local government's final adopted budget. Adopted budget amounts are derived from official local government reporting to the Department of the Treasury.Negative values indicate that local governments' total adopted budgets for the given topic across all individual programs were lower than their original allocated amounts.  We do not have original allocation amounts for capacity building programs as these programs were not specifically enumerated in the Covid-19 economic recovery plans. Therefore, capacity building does not appear in this chart.
 <br> <br>
 
 #### Cook County
@@ -621,7 +625,7 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
                             "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
-    limits = c(-500000000, 500000000),
+    limits = c(-150000000, 150000000),
     labels = scales::label_dollar(
       scale = 1 / 1e6,
       accuracy = 0.1
@@ -633,7 +637,7 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
 
 ggplotly(p, tooltip = "text", height = 450)
 ```
-Placeholder text: Some geographies are all negative for Reasons. Capacity building topic doesn't show up for Reasons. 
+Here, allocations refer to funds originally designated for specific uses in local government plans, such as Covid-19 recovery plans, many of which were drafted in 2021-2022. As community needs and government priorities shifted over time, program allocations may have also shifted, and may vary from the final dollar amount committed to in a local government's final adopted budget. Adopted budget amounts are derived from official local government reporting to the Department of the Treasury.Negative values indicate that local governments' total adopted budgets for the given topic across all individual programs were lower than their original allocated amounts.  We do not have original allocation amounts for capacity building programs as these programs were not specifically enumerated in the Covid-19 economic recovery plans. Therefore, capacity building does not appear in this chart.
 <br> <br>
 
 #### Illinois
@@ -651,7 +655,7 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
                             "<br>Difference between allocation and adopted budget: ", scales::dollar(budget_to_allocation_gap),
                             "<br>Percent difference between allocation and adopted budget: ", round(percent_difference, 2), "%")), fill = "#47c3d3") +
   scale_x_continuous(
-    limits = c(-5000000000, 5000000000),
+    limits = c(-400000000, 400000000),
     labels = scales::label_dollar(
       scale = 1 / 1e6,
       accuracy = 0.1
@@ -661,7 +665,7 @@ p <- ggplot(budget_gap_filter, aes(x = budget_to_allocation_gap, y = topic)) +
 
 ggplotly(p, tooltip = "text", height = 450)
 ```
-Placeholder text: Some geographies are all negative for Reasons. Capacity building topic doesn't show up for Reasons. 
+Here, allocations refer to funds originally designated for specific uses in local government plans, such as Covid-19 recovery plans, many of which were drafted in 2021-2022. As community needs and government priorities shifted over time, program allocations may have also shifted, and may vary from the final dollar amount committed to in a local government's final adopted budget. Adopted budget amounts are derived from official local government reporting to the Department of the Treasury.Negative values indicate that local governments' total adopted budgets for the given topic across all individual programs were lower than their original allocated amounts.  We do not have original allocation amounts for capacity building programs as these programs were not specifically enumerated in the Covid-19 economic recovery plans. Therefore, capacity building does not appear in this chart.
 <br> <br>
 
 ## Adopted Funds Spent by Topic {.tabset .tabset-pills}
@@ -707,25 +711,22 @@ plot_expended_slfrf <- function(.data, geography) {
 ### Chicago
 
 ```{r, fig.width = 10, fig.height = 6}
-plot_expended_slfrf(data, "Chicago")
+plot_expended_slfrf(arpa_slfrf_data, "Chicago")
 ```
-Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
 <br> <br>
 
 ### Cook County
 
 ```{r, fig.width = 10, fig.height = 6}
-plot_expended_slfrf(data, "Cook County")
+plot_expended_slfrf(arpa_slfrf_data, "Cook County")
 ```
-Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
 <br> <br>
 
 ### Illinois
 
 ```{r, fig.width = 10, fig.height = 6}
-plot_expended_slfrf(data, "Illinois")
+plot_expended_slfrf(arpa_slfrf_data, "Illinois")
 ```
-Placeholder text: Explanation for chart difference between adopted budget vs. allocations.
 <br> <br>
 
 ## Spending by Quarter {.tabset .tabset-pills}
