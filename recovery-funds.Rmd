@@ -61,7 +61,7 @@ set_urbn_defaults(style = "print", base_size = 12)
 
 # Load Merriweather font
 uname <- "RPitingo"
-uname <- "astern"
+#uname <- "astern"
 
 pc_font_path <- paste0("C:/Users/", uname, "/AppData/Local/Microsoft/Windows/Fonts/")
 mac_font_path <- "~/Library/Fonts"
