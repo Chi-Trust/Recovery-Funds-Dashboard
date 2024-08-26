@@ -1,0 +1,55 @@
+program_name,ffy,recipient,total_amount_allocation,total_amount_award,amount_diff,pct_diff,category
+5309 Fixed Guideway Capital Investment Grants,2022,Chicago - Transit Authority Unknown,265476132,NA,NA,NA,NA
+5309 Fixed Guideway Capital Investment Grants,2023,Chicago - Transit Authority Unknown,0,NA,NA,NA,NA
+5310 Enhanced Mobility of Seniors & Individuals with Disabilities,2022,Illinois - Location TBD,9991503,NA,NA,NA,Transit
+5310 Enhanced Mobility of Seniors & Individuals with Disabilities,2023,Illinois - Location TBD,10078759,NA,NA,NA,Transit
+5329 Public Transportation Safety and Oversight,2022,Illinois - Location TBD,3609952,NA,NA,NA,Transit
+5329 Public Transportation Safety and Oversight,2023,Illinois - Location TBD,3713442,NA,NA,NA,Transit
+5337 State of Good Repair,2022,Chicago - Transit Authority Unknown,400095098,242887136,-157207962,-39.29,Transit
+5337 State of Good Repair,2023,Chicago - Transit Authority Unknown,405865945,NA,NA,NA,Transit
+5339 Bus and Bus Facilities,2022,Chicago - Transit Authority Unknown,12661857,12661857,0,0,Transit
+5339 Bus and Bus Facilities,2023,Chicago - Transit Authority Unknown,15080342,NA,NA,NA,Transit
+Airport Infrastructure Grants,2022,Chicago Midway International - MDW,20245396,20245396,0,0,Airports
+Airport Infrastructure Grants,2022,Chicago O'Hare International - ORD,73672455,73672455,0,0,Airports
+Airport Infrastructure Grants,2022,Lansing Municipal - IGQ,159000,159000,0,0,Airports
+Airport Infrastructure Grants,2023,Chicago Midway International - MDW,40334330,20167165,-20167165,-50,Airports
+Airport Infrastructure Grants,2023,Chicago O'Hare International - ORD,146752380,73376190,-73376190,-50,Airports
+Airport Infrastructure Grants,2023,Lansing Municipal - IGQ,290000,145000,-145000,-50,Airports
+Airport Infrastructure Grants,2024,Chicago Midway International - MDW,20288092,NA,NA,NA,Airports
+Airport Infrastructure Grants,2024,Chicago O'Hare International - ORD,69604509,NA,NA,NA,Airports
+Airport Infrastructure Grants,2024,Lansing Municipal - IGQ,144000,NA,NA,NA,Airports
+Bridge Investment Program Formula Grants,2022,Illinois - Location TBD,297268565,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Bridge Investment Program Formula Grants,2023,Illinois - Location TBD,297268565,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Carbon Reduction (Section 175),2022,Illinois - Location TBD,43357316,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Carbon Reduction (Section 175),2023,Illinois - Location TBD,44224462,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Clean School Bus Program,2022,Chicago Public Schools,0,NA,NA,NA,Electric Vehicles
+Clean School Bus Program,2023,Chicago Public Schools,20285017,NA,NA,NA,Electric Vehicles
+Clean Water State Revolving Fund - Emerging Contaminants,2022,Illinois - Location TBD,52859000,NA,NA,NA,Water
+Clean Water State Revolving Fund - Emerging Contaminants,2023,Illinois - Location TBD,34269000,NA,NA,NA,Water
+Clean Water State Revolving Fund - Emerging Contaminants,2024,Illinois - Location TBD,130268000,NA,NA,NA,Water
+Congestion Mitigation and Air Quality Improvement Program,2022,Illinois - Location TBD,119957587,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Congestion Mitigation and Air Quality Improvement Program,2023,Illinois - Location TBD,122356739,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Highway Safety Improvement Program,2022,Illinois - Location TBD,102028534,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Highway Safety Improvement Program,2023,Illinois - Location TBD,104245906,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Low or No Emission Bus Grants,2022,Chicago Transit Authority,28836080,NA,NA,NA,Electric Vehicles
+Low or No Emission Bus Grants,2023,Illinois - Location TBD,24899377,NA,NA,NA,Electric Vehicles
+Metropolitan Planning (FAST Act - FHWA),2022,Illinois - Location TBD,22509719,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Metropolitan Planning (FAST Act - FHWA),2023,Illinois - Location TBD,22959914,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Metropolitan Transportation Planning,2022,Illinois - Location TBD,8660684,NA,NA,NA,Transit
+Metropolitan Transportation Planning,2023,Illinois - Location TBD,8342015,NA,NA,NA,Transit
+National Electric Vehicle Infrastructure Formula Program,2022,Illinois - Location TBD,21998178,NA,NA,NA,Electric Vehicles
+National Electric Vehicle Infrastructure Formula Program,2023,Illinois - Location TBD,31655626,NA,NA,NA,Electric Vehicles
+National Electric Vehicle Infrastructure Formula Program,2024,Illinois - Location TBD,31655845,NA,NA,NA,Electric Vehicles
+National Highway Freight Program,2022,Illinois - Location TBD,49306725,NA,NA,NA,"Roads, Bridges, and Major Projects"
+National Highway Freight Program,2023,Illinois - Location TBD,50292860,NA,NA,NA,"Roads, Bridges, and Major Projects"
+National Highway Performance Program,2022,Illinois - Location TBD,999514444,NA,NA,NA,"Roads, Bridges, and Major Projects"
+National Highway Performance Program,2023,Illinois - Location TBD,1019504733,NA,NA,NA,"Roads, Bridges, and Major Projects"
+"PROTECT (Promoting Resilient Operations for Transformative, Efficient, and Cost Saving Transportation) Formula Program",2022,Illinois - Location TBD,49300375,NA,NA,NA,"Roads, Bridges, and Major Projects"
+"PROTECT (Promoting Resilient Operations for Transformative, Efficient, and Cost Saving Transportation) Formula Program",2023,Illinois - Location TBD,50286382,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Railway-Highway Crossing Program,2022,Illinois - Location TBD,11306853,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Railway-Highway Crossing Program,2023,Illinois - Location TBD,11358649,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Surface Transportation Block Grant Program,2022,Illinois - Location TBD,486250270,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Surface Transportation Block Grant Program,2023,Illinois - Location TBD,495975275,NA,NA,NA,"Roads, Bridges, and Major Projects"
+Transit Infrastructure Grants - Congresionally Directed Spending,2022,Chicago - Transit Authority Unknown,4100000,4100000,0,0,Transit
+Transit Infrastructure Grants - Congresionally Directed Spending,2022,Illinois - Location TBD,8250000,NA,NA,NA,Transit
+Urbanized Area Formula Grants (5307 + 5340),2023,Chicago - Transit Authority Unknown,636786233,NA,NA,NA,Transit
