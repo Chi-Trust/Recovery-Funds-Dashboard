@@ -2,11 +2,11 @@
 title: ""
 output: 
   html_document:
-    number_sections: FALSE
-    self_contained: FALSE
+    number_sections: false
+    self_contained: TRUE
     code_folding: none
-    toc: FALSE
-    toc_float: FALSE
+    toc: false
+    toc_float: false
     css: !expr here::here("www", "web_report_trust.css")
 fig.width: 10
 fig.height: 6
@@ -132,8 +132,8 @@ Federal COVID-19 pandemic-response packages have provided unprecedented aid to s
 **This dashboard tracks a subset of the federal recovery funds flowing into the City of Chicago, Cook County, and the State of Illinois** that can be used for inclusive recovery efforts that align with key priorities of The Chicago Community Trust: community investment, community safety, household investment, housing, and workforce development, which are all vital to narrowing the Chicago region's racial and ethnic wealth gap. The dashboard primarily tracks appropriations and allocations, or how much funding the federal government has committed to provide local jurisdictions. For the American Rescue Plan Act State and Local Fiscal Recovery Funds (ARPA SLFRF), we are able to track recipient plans, budgets, and expenditures. The flow of recovery funds captured in the dashboard is shown below. 
 
 
-```{r, echo=FALSE, fig.align='center'}
-knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_rec.png"))
+```{r flowchart, echo=FALSE, fig.align='center'}
+knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_rec.png") )
 ```
 
 For a few select programs where information is available, the dashboard also explores spending by zip code.We will add more program allocation and spending information as new data become available. For more information, including the **glossary and frequently asked questions**, see [About the Dashboard]{#sec-about} below.

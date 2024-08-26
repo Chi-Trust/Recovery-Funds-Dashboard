@@ -1,5 +1,6 @@
 library(rmarkdown)
 library(purrr)
+library(extrafont)
 
 site_pages <- c(
   "infrastructure-funds.Rmd",
