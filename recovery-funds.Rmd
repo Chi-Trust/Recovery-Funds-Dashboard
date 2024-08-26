@@ -133,7 +133,7 @@ Federal COVID-19 pandemic-response packages have provided unprecedented aid to s
 
 
 ```{r flowchart, echo=FALSE, fig.align='center'}
-knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_rec.png"), dpi = 500)
+knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_rec.png") )
 ```
 
 For a few select programs where information is available, the dashboard also explores spending by zip code.We will add more program allocation and spending information as new data become available. For more information, including the **glossary and frequently asked questions**, see [About the Dashboard]{#sec-about} below.
