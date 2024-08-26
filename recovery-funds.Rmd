@@ -106,7 +106,7 @@ if (s3_bucket == "") {
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather" />
 
 ```{r, echo=FALSE, fig.align='center'}
-knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.jpg") )
+knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.jpg"), dpi = 500)
 ```
 
 <center>
