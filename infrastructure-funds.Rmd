@@ -49,7 +49,7 @@ The dashboard displays both allocations, or designated allocations for a jurisdi
 
 The flow of federal IIJA dollars through appropriations, allocations, and awards is shown below:
 
-```{r, echo=FALSE, fig.align='center'}
+```{r, echo=FALSE, out.width="85%", fig.align='center'}
 knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_inf.png"))
 ```
 

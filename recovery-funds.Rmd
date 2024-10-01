@@ -132,7 +132,7 @@ Federal COVID-19 pandemic-response packages have provided unprecedented aid to s
 **This dashboard tracks a subset of the federal recovery funds flowing into the City of Chicago, Cook County, and the State of Illinois** that can be used for inclusive recovery efforts that align with key priorities of The Chicago Community Trust: community investment, community safety, household investment, housing, and workforce development, which are all vital to narrowing the Chicago region's racial and ethnic wealth gap. The dashboard primarily tracks appropriations and allocations, or how much funding the federal government has committed to provide local jurisdictions. For the American Rescue Plan Act State and Local Fiscal Recovery Funds (ARPA SLFRF), we are able to track recipient plans, budgets, and expenditures. The flow of recovery funds captured in the dashboard is shown below. 
 
 
-```{r flowchart, echo=FALSE, fig.align='center'}
+```{r flowchart, echo=FALSE, out.width="100%", fig.align='center'}
 knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_rec.png") )
 ```
 
@@ -424,7 +424,7 @@ plot_funds_by_geo_topic <- function(data, fill_var) {
       breaks = fill_breaks
     ) +
     labs(
-      x = "Topic",
+      x = "",
       y = "Total Allocation (millions)",
       caption = "This graph shows selected projects funded through the American Rescue Plan Act (ARPA), the Coronavirus Aid, Relief, and Economic Security Act (CARES),\nand the Coronavirus Response and Relief Supplemental Appropriations Act (CRRSAA). For more detail, see the FAQ."
     ) +
@@ -469,7 +469,7 @@ plot_funds_by_geo_topic(data_filter, "legislation")
 
 ## Cook County
 
-```{r c2, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Cook County showing largest allocation to state and local discretionary funds, followed by housing programs."}
+```{r c2, fig.width = 10, fig.height = 6, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Cook County showing largest allocation to state and local discretionary funds, followed by housing programs."}
 data_filter <- data %>%
   filter(geography == "Cook County", !is.na(allocation)) %>% 
   select(legislation, program, topic, subtopic, allocation)
@@ -482,7 +482,7 @@ plot_funds_by_geo_topic(data_filter, "legislation")
 
 ## Illinois
 
-```{r c3, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Illinois showing largest allocation to state and local discretionary funds, followed by housing programs."}
+```{r c3, fig.width = 10, fig.height = 6, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Illinois showing largest allocation to state and local discretionary funds, followed by housing programs."}
 data_filter <- data %>%
   filter(geography == "Illinois", !is.na(allocation)) %>% 
   select(legislation, program, topic, subtopic, allocation)
