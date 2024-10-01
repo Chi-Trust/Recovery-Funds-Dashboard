@@ -469,7 +469,7 @@ plot_funds_by_geo_topic(data_filter, "legislation")
 
 ## Cook County
 
-```{r c2, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Cook County showing largest allocation to state and local discretionary funds, followed by housing programs."}
+```{r c2, fig.width = 10, fig.height = 6, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Cook County showing largest allocation to state and local discretionary funds, followed by housing programs."}
 data_filter <- data %>%
   filter(geography == "Cook County", !is.na(allocation)) %>% 
   select(legislation, program, topic, subtopic, allocation)
@@ -482,7 +482,7 @@ plot_funds_by_geo_topic(data_filter, "legislation")
 
 ## Illinois
 
-```{r c3, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Illinois showing largest allocation to state and local discretionary funds, followed by housing programs."}
+```{r c3, fig.width = 10, fig.height = 6, fig.alt= "Bar chart of federal recovery allocations by legislation and policy topic for Illinois showing largest allocation to state and local discretionary funds, followed by housing programs."}
 data_filter <- data %>%
   filter(geography == "Illinois", !is.na(allocation)) %>% 
   select(legislation, program, topic, subtopic, allocation)
