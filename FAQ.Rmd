@@ -5,6 +5,13 @@ output:
     css: !expr here::here("www", "web_report_trust.css")
 ---
 
+```{=html}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+</style>
+```
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather" />
+
 # Frequently Asked Questions
 
 ```{r, echo = FALSE}
