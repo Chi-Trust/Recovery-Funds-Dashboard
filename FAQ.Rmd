@@ -43,7 +43,7 @@ This dashboard was created to track funds flowing through the City of Chicago, C
 <summary>Where does the information in this dashboard come from?</summary>
 <br>
 Allocation and expenditure data are compiled from federal agency reports, public spending plans, grant announcements, and budget reports from our three geographies of focus. For each program, the data source and source links are listed in the programs table.
-
+<br>
 Recovery plans for the City of Chicago, Cook County, and State of Illinois can be found below:
 
 - [Chicago Recovery Plan](https://urbanorg.app.box.com/file/1462887719191) (September 2021)
@@ -95,7 +95,9 @@ This dashboard does not include funds that flow directly from the federal govern
 <details>
 <summary>How did you select which funding programs to include, and how to categorize them?</summary>
 <br>
-Selected programs reflect a subset of major federal economic recovery funds and infrastructure funds. For the recovery dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs that align with their institutional priority policy areas in supporting economic recovery: community investment, community safety, household investment, housing, and workforce development. For the infrastructure dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs in the following areas: transit; roads, bridges, and major projects; airports; electric vehicles; water infrastructure; rail; broadband; and traffic safety. We also include total amounts of CARES state and local discretionary funding for which we do not have more specific information on how the funds were spent.  
+Selected programs reflect a subset of major federal economic recovery funds and infrastructure funds. For the recovery dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs that align with their institutional priority policy areas in supporting economic recovery: community investment, community safety, household investment, housing, and workforce development. For the infrastructure dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs in the following areas: transit; roads, bridges, and major projects; airports; electric vehicles; water infrastructure; rail; broadband; and traffic safety. We also include total amounts of CARES state and local discretionary funding for which we do not have more specific information on how the funds were spent.
+<br>
+Programs may also be edited over time to reflect changes to project titles and descriptions in quarterly Treasury expenditure reports, to distinguish between programs with similar scopes or titles (e.g. workforce development strategy as distinct from workforce development program), and to clarify acronyms (for instance, spelling out “gender-based violence” when a program name uses the acronym GBV). Additionally, we may remove programs we are no longer tracking to be responsive to and aligned with the Trust’s priority focus areas.  
 <br>
 
 </details>
