@@ -42,8 +42,16 @@ This dashboard was created to track funds flowing through the City of Chicago, C
 <details>
 <summary>Where does the information in this dashboard come from?</summary>
 <br>
-Allocation and expenditure data are compiled from federal agency reports, public spending plans, grant announcements, and budget reports from our three geographies of focus. For each program, the data source and source links are listed in the programs table. 
+Allocation and expenditure data are compiled from federal agency reports, public spending plans, grant announcements, and budget reports from our three geographies of focus. For each program, the data source and source links are listed in the programs table.
+
+Recovery plans for the City of Chicago, Cook County, and State of Illinois can be found below:
+
+- [Chicago Recovery Plan](https://urbanorg.app.box.com/file/1462887719191) (September 2021)
+- [Cook County ARPA at a Glance](https://urbanorg.app.box.com/file/1462884083725) (December 2021)
+- [Cook County ARPA at a Glance](https://urbanorg.app.box.com/file/1462887637405?s=rep98gakvsbwdgjxb9a78qkqdd83tg2i) (February 2022)
+- [State of Illinois Recovery Plan - Initial Report](https://urbanorg.app.box.com/file/1662653260648) (August 2021)
 <br>
+</details>
 
 </details>
 
