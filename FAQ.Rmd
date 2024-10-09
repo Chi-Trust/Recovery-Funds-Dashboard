@@ -119,22 +119,6 @@ The dashboard categorizes recovery funding allocations across five topics and tw
 </details>
 
 <details>
-<summary>Will the dashboard feature expenditure data?</summary>
-<br>
-The dashboard does not currently feature expenditure data, but will be updated with spending data for selected programs as information becomes available. Spending information can be pulled from public state, county, and local government expenditure reports, including legislative budget reports and mandatory recovery plan performance reports to the U.S. Treasury Department. Spending information for regional entities and tribal governments that received federal funding – which are not included in this dashboard – can be pulled in the same manner. Reporting requirements and deadlines vary by program.
-<br>
-
-</details>
-
-<details>
-<summary>Why are some funding amounts not exact?</summary>
-<br>
-The ARPA SLFRF-funded programs included in the dashboard are sourced from line item programs as listed by local, county, and state governments in public ARPA recovery plan reports. In some cases, these reports list multiple programs under one broad spending category, with one budget number for all programs—for instance, a public safety category may include three separate programs listed under one total budget number for all public safety initiatives, without allocations for each program. The “amount exact?” column indicates where we have split the total program budget evenly across multiple line items to generate an estimated average amount per program, and where we have pulled the exact budget number for one line item program.
-<br>
-
-</details>
-
-<details>
 <summary>How were the programs in the “Explore Spending for Selected Programs” section at the bottom of the dashboard chosen?</summary>
 <br>
 The dashboard features maps for selected programs for which expenditure data at the zip code level is available. We are working to add more programs to this section as we identify more recovery and infrastructure programs with zip code-level spending data available.  
