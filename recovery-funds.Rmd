@@ -562,7 +562,7 @@ xaringanExtra::use_panelset()
 ```
 
 
-## Gap Between Allocations and Adopted Budget
+## Difference Between 2021 Allocations and 2023 Adopted Budgets
 
 ```{r c6}
 budget_gap <-
