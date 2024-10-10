@@ -892,7 +892,10 @@ plot_spending_by_quarter <- function(.data, geography) {
     guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
     theme_minimal() +
     theme(
-      text = element_text(size = 14),
+      text = element_text(family = "Merriweather", size = 11),
+      axis.text = element_text(family = "Merriweather", size = 11),  
+      axis.title = element_text(family = "Merriweather", size = 11),  
+      legend.text = element_text(family = "Merriweather", size = 11), 
       legend.position = "bottom"
     )
 }
@@ -965,10 +968,10 @@ plot_funds_by_geo <- function(data, fill_var) {
       caption = "This graph shows selected projects funded through the American Rescue Plan Act (ARPA), the Coronavirus Aid, Relief, and Economic Security Act (CARES),\nand the Coronavirus Response and Relief Supplemental Appropriations Act (CRRSAA). For more detail, see the FAQ."
     ) +
     theme(
-      text = element_text(family = "Merriweather"),
-      legend.text = element_text(size = 10),
-      plot.caption.position = "plot",
-      plot.caption = element_text(hjust = 0, size = 8.5)
+      text = element_text(family = "Merriweather"),          # Set default font for all text
+      legend.text = element_text(family = "Merriweather", size = 10), # Legend text
+      plot.caption = element_text(family = "Merriweather", hjust = 0, size = 8.5), # Caption font
+      plot.caption.position = "plot" # Position of the caption
     )
 
   if (nrow(unique(data[fill_var])) > 4) {
