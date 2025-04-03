@@ -25,6 +25,6 @@ This repository is forked from the [Recovery-Funds-Dashboard](https://github.com
 
 ## Contacts
 
-This project is a collaboration between [The Chicago Community Trust](https://www.cct.org/) and the [Urban Institute](https://www.urban.org/). It is supported by a grant from the Kresge Foundation through the [Shared Prosperity Partnership](http://www.sharedprosperitypartnership.org/).
+This project is a collaboration between [The Chicago Community Trust](https://www.cct.org/) and the [Urban Institute](https://www.urban.org/). Initial support for the dashboard came from the Kresge Foundation through the [Shared Prosperity Partnership](http://www.sharedprosperitypartnership.org/). Ongoing support for this dashboard comes from the Chicago Community Trust. 
 
 For more information about the dashboard, please contact [Aimee Ramirez](mailto:aramirez@cct.org) (The Chicago Community Trust) and [Karolina Ramos](mailto:kramos@urban.org) (Urban Institute).
