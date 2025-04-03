@@ -16,7 +16,7 @@ This repository is forked from the [Recovery-Funds-Dashboard](https://github.com
 
 1. Make the edits to the staging dashboard in this repo in a branch.
 2. Open a pull request to merge the branch into main. Have Alena Stern or Rob Pittingolo review the PR. Once approved, merge the PR.
-3. Open a pull request to merge the main branch of the `Stg-Recovery-Funds-Dashboard` repo into the main branch of the `Recovery-Funds-Dashboard` repo. You can do this by clicking the contribute button at the top of this page (see image below).
+3. Open a pull request to merge the main branch of the `Stg-Recovery-Funds-Dashboard` repo into the main branch of the `Recovery-Funds-Dashboard` repo. You can do this by clicking the contribute button at the top of this page (see image below) and then selecting "Open Pull Request".
 
 ![image](https://github.com/user-attachments/assets/bdbe4066-524f-4108-a838-fc82a2771d85)
 
