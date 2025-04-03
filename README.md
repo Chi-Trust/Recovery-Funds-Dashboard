@@ -21,7 +21,7 @@ This repository is forked from the [Recovery-Funds-Dashboard](https://github.com
 ![image](https://github.com/user-attachments/assets/bdbe4066-524f-4108-a838-fc82a2771d85)
 
 4. Ask the Trust's representative to review the latest changes on the [staging GitHub pages deployment](https://chi-trust.github.io/Stg-Recovery-Funds-Dashboard/) for approval.
-5. Once the Trust approves the changes, you can merge the PR to incorporate teh changes into the `Recovery-Funds-Dashboard` repo. This will automatically trigger a new deployment of the GitHub pages site. This may take a few minutes to update. You should check the [production GitHub pages deployment]((https://chi-trust.github.io/Recovery-Funds-Dashboard/) to ensure the update looks good once it's live. 
+5. Once the Trust approves the changes, you can merge the PR to incorporate the changes into the `Recovery-Funds-Dashboard` repo. This will automatically trigger a new deployment of the production GitHub pages site. This may take a few minutes to update. You should check the [production GitHub pages deployment]((https://chi-trust.github.io/Recovery-Funds-Dashboard/) to ensure the update looks good once it's live. 
 
 ## Contacts
 
