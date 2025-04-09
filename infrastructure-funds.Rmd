@@ -13,6 +13,7 @@ editor_options:
   markdown: 
     wrap: 72
 ---
+
 ```{=html}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
@@ -20,7 +21,7 @@ editor_options:
 ```
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather" />
 
-```{r, echo=FALSE, fig.align='center'}
+```{r, echo=FALSE, fig.align='center', out.width=6, out.height = 3, class.source = "fold-hide"}
 knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.jpg"), dpi = 500)
 ```
 
@@ -30,8 +31,8 @@ knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.
 
 </center>
 
-
 <br>
+
 ```{r, echo = FALSE}
 cur_date <- Sys.Date()
 ```
@@ -40,14 +41,19 @@ cur_date <- Sys.Date()
 
 <br>
 
-Passed in November 2021, the Infrastructure Investment and Jobs Act—also known as the Bipartisan Infrastructure Law—provides historic funding to rebuild and enhance the nation’s infrastructure. IIJA programs offer funding for localities to repair and improve transit systems and infrastructure such as roads, bridges, and airports, to advance environmental justice and climate resilience in communities, to expand access to broadband, and to restore clean water systems, among other initiatives.  
+Passed in November 2021, the Infrastructure Investment and Jobs Act—also known as the Bipartisan Infrastructure Law—provides historic funding to rebuild and enhance the nation’s infrastructure. IIJA programs offer funding for localities to repair and improve transit systems and infrastructure such as roads, bridges, and airports, to advance environmental justice and climate resilience in communities, to expand access to broadband, and to restore clean water systems, among other initiatives.
 
-As individual IIJA funding opportunities are announced and awarded, this dashboard captures a **subset of federal funds** flowing directly to the City of Chicago, the Chicago Transit Authority, Chicago-area airports, Cook County, the Regional Transit Authority (Pace and Metra) and the State of Illinois. Data in the dashboard reflect major IIJA programs—those with at least $1 billion in funding—that address local and regional transit, roads, bridges, airports, electric vehicles, water infrastructure, rail, broadband, and traffic safety programs.  
+As individual IIJA funding opportunities are announced and awarded, this dashboard captures a **subset of federal funds** flowing directly to the City of Chicago, the Chicago Transit Authority, Chicago-area airports, Cook County, the Regional Transit Authority (Pace and Metra) and the State of Illinois. Data in the dashboard reflect major IIJA programs—those with at least \$1 billion in funding—that address local and regional transit, roads, bridges, airports, electric vehicles, water infrastructure, rail, broadband, and traffic safety programs.
 
-The dashboard displays both allocations, or designated allocations for a jurisdiction’s projects, as well as awards, or the final funding amount disbursed to a jurisdiction. Awards data are presented for previous fiscal years, and allocations data are presented for the current fiscal year. The dashboard will continue to be updated as new data become available. 
+The dashboard displays both allocations, or designated allocations for a jurisdiction’s projects, as well as awards, or the final funding amount disbursed to a jurisdiction. Awards data are presented for previous fiscal years, and allocations data are presented for the current fiscal year. The dashboard will continue to be updated as new data become available.
+
+The flow of federal IIJA dollars through appropriations, allocations, and awards is shown below:
+
+```{r, echo=FALSE, out.width="85%", fig.align='center'}
+knitr::include_graphics(here::here("www", "images", "Funding Flows Charts_inf.png"))
+```
 
 For more information, see our [Frequently Asked Questions](./FAQ.html) and [Glossary](./glossary.html).
-
 
 ```{r setup}
 #| echo: false
@@ -83,12 +89,26 @@ library(scales)
 
 set_urbn_defaults(style = "print", base_size = 12)
 
-pc_font_path <- "C:/Users/astern/AppData/Local/Microsoft/Windows/Fonts/"
-mac_font_path <- "~/Library/Fonts"
+# Load Merriweather font
+uname <- "RPitingo"
+#uname <- "AStern"
 
-font_import(paths = pc_font_path,
-            pattern = "Merriweather",
-            prompt = FALSE
+pc_font_path <- paste0("C:/Users/", uname, "/AppData/Local/Microsoft/Windows/Fonts/")
+mac_font_path <- "~/Library/Fonts"
+font_path <-
+  switch(Sys.info()[["sysname"]],
+    Windows = {
+      pc_font_path
+    },
+    Darwin = {
+      "~/Library/Fonts"
+    }
+  )
+
+font_import(
+  paths = font_path,
+  pattern = "Merriweather",
+  prompt = FALSE
 )
 
 # set current fiscal year 
@@ -241,10 +261,20 @@ all_totals <- allocation_totals %>%
          pct_diff = round((amount_diff/total_amount_allocation)*100, 2)) %>%
   left_join(data_programs %>% select(category, program_name), by = "program_name")
 
-write_csv(all_totals, "data/intermediate_data/allocation_award_diff.csv")
+
+# Set the intermediate folder
+intermediate_path <- here("data/intermediate_data")
+
+# Check if the intermediate folder exists
+if (!file.exists(intermediate_path)) {
+  # If it doesn't exist, create it
+  dir.create(intermediate_path, recursive = TRUE)
+}
+
+# Write the CSV file to the directory
+write_csv(all_totals, file.path(intermediate_path, "allocation_award_diff"))
 
 ```
-
 
 # Summary of Federal Infrastructure Funding
 
@@ -268,7 +298,6 @@ data %>%
 <br> <br>
 
 # Infrastructure Funding by Recipient and Topic {.tabset .tabset-pills}
-
 
 ```{r}
 
@@ -476,7 +505,6 @@ plot_funds_by_geo_var_obs(data %>% filter(ffy == 2023), category)
 
 <br><br>
 
-
 # Infrastructure Funding by Recipient and Funding Type {.tabset .tabset-pills}
 
 ## All
@@ -511,10 +539,10 @@ plot_funds_by_geo_var_obs(data %>% filter(ffy == 2023), funding_type)
 
 ## Key Terms
 
-- **Competitive:** grants that recipients apply for and are selected to receive based on merits of application.
-- **Formula**: grants that eligible recipients are guaranteed to receive based on funding criteria.
-- **Earmarks:** funds provided by Congress for specific projects, not to be allocated by federal agencies through a competitive process. 
-- **Revolving loan funds:** a pool of money that uses interest and principal payments on old loans to issue new loans. 
+-   **Competitive:** grants that recipients apply for and are selected to receive based on merits of application.
+-   **Formula**: grants that eligible recipients are guaranteed to receive based on funding criteria.
+-   **Earmarks:** funds provided by Congress for specific projects, not to be allocated by federal agencies through a competitive process.
+-   **Revolving loan funds:** a pool of money that uses interest and principal payments on old loans to issue new loans.
 
 <br><br>
 

@@ -5,6 +5,13 @@ output:
     css: !expr here::here("www", "web_report_trust.css")
 ---
 
+```{=html}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+</style>
+```
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather" />
+
 # Frequently Asked Questions
 
 ```{r, echo = FALSE}
@@ -35,8 +42,16 @@ This dashboard was created to track funds flowing through the City of Chicago, C
 <details>
 <summary>Where does the information in this dashboard come from?</summary>
 <br>
-Allocation and expenditure data are compiled from federal agency reports, public spending plans, grant announcements, and budget reports from our three geographies of focus. For each program, the data source and source links are listed in the programs table. 
+Allocation and expenditure data are compiled from federal agency reports, public spending plans, grant announcements, and budget reports from our three geographies of focus. For each program, the data source and source links are listed in the programs table.
 <br>
+Recovery plans for the City of Chicago, Cook County, and State of Illinois can be found below:
+
+- [Chicago Recovery Plan](https://urbanorg.app.box.com/file/1462887719191) (September 2021)
+- [Cook County ARPA at a Glance](https://urbanorg.app.box.com/file/1462884083725) (December 2021)
+- [Cook County ARPA at a Glance](https://urbanorg.app.box.com/file/1462887637405?s=rep98gakvsbwdgjxb9a78qkqdd83tg2i) (February 2022)
+- [State of Illinois Recovery Plan - Initial Report](https://urbanorg.app.box.com/file/1662653260648) (August 2021)
+<br>
+</details>
 
 </details>
 
@@ -80,7 +95,9 @@ This dashboard does not include funds that flow directly from the federal govern
 <details>
 <summary>How did you select which funding programs to include, and how to categorize them?</summary>
 <br>
-Selected programs reflect a subset of major federal economic recovery funds and infrastructure funds. For the recovery dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs that align with their institutional priority policy areas in supporting economic recovery: community investment, community safety, household investment, housing, and workforce development. For the infrastructure dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs in the following areas: transit; roads, bridges, and major projects; airports; electric vehicles; water infrastructure; rail; broadband; and traffic safety. We also include total amounts of CARES state and local discretionary funding for which we do not have more specific information on how the funds were spent.  
+Selected programs reflect a subset of major federal economic recovery funds and infrastructure funds. For the recovery dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs that align with their institutional priority policy areas in supporting economic recovery: community investment, community safety, household investment, housing, and workforce development. For the infrastructure dashboard, the CCT reviewed funding allocations across jurisdictions and selected programs in the following areas: transit; roads, bridges, and major projects; airports; electric vehicles; water infrastructure; rail; broadband; and traffic safety. We also include total amounts of CARES state and local discretionary funding for which we do not have more specific information on how the funds were spent.
+<br>
+Programs may also be edited over time to reflect changes to project titles and descriptions in quarterly Treasury expenditure reports, to distinguish between programs with similar scopes or titles (e.g. workforce development strategy as distinct from workforce development program), and to clarify acronyms (for instance, spelling out “gender-based violence” when a program name uses the acronym GBV). Additionally, we may remove programs we are no longer tracking to be responsive to and aligned with the Trust’s priority focus areas.  
 <br>
 
 </details>
@@ -97,22 +114,6 @@ The State and Local Fiscal Recovery Funds (SLFRF) program is an allocation withi
 <summary>How did you select topics and subtopics to categorize funds?</summary>
 <br>
 The dashboard categorizes recovery funding allocations across five topics and twenty subtopics that map budget line items from local, county, and state recovery plans to the Chicago Community Trust’s priority policy areas and strategies in its work supporting inclusive recovery. The dashboard categorizes infrastructure funding allocations across eight topics used in data provided by the White House Infrastructure Implementation Task Force. See the glossary for a definition of each topic and subtopic included in the dashboard. The topics may change and may feature additional categories as new information on allocations and expenditures becomes available.  
-<br>
-
-</details>
-
-<details>
-<summary>Will the dashboard feature expenditure data?</summary>
-<br>
-The dashboard does not currently feature expenditure data, but will be updated with spending data for selected programs as information becomes available. Spending information can be pulled from public state, county, and local government expenditure reports, including legislative budget reports and mandatory recovery plan performance reports to the U.S. Treasury Department. Spending information for regional entities and tribal governments that received federal funding – which are not included in this dashboard – can be pulled in the same manner. Reporting requirements and deadlines vary by program.
-<br>
-
-</details>
-
-<details>
-<summary>Why are some funding amounts not exact?</summary>
-<br>
-The ARPA SLFRF-funded programs included in the dashboard are sourced from line item programs as listed by local, county, and state governments in public ARPA recovery plan reports. In some cases, these reports list multiple programs under one broad spending category, with one budget number for all programs—for instance, a public safety category may include three separate programs listed under one total budget number for all public safety initiatives, without allocations for each program. The “amount exact?” column indicates where we have split the total program budget evenly across multiple line items to generate an estimated average amount per program, and where we have pulled the exact budget number for one line item program.
 <br>
 
 </details>
