@@ -27,10 +27,10 @@ knitr::include_graphics(here::here("www", "images", "CCT_logo_centered_blue-new.
 
 <center>
 
-<h1>DRAFT Federal Funds Tracker</h1>
-
+<h1>Federal Funds Tracker</h1>
+<!--
 **This dashboard is a draft undergoing active development. It should not be shared or used for analysis. The most recent published version of the dashboard can be found [here](https://chi-trust.github.io/Recovery-Funds-Dashboard/index.html)**
-
+-->
 </center>
 
 The [Recovery Funds Dashboard](./recovery-funds.html) tracks a subset of the federal recovery funds flowing from the Coronavirus Aid, Relief, and Economic Security Act (CARES), the Consolidated Appropriations Act 2021 (CRRSAA), and the American Rescue Plan Act (ARPA) into Chicago, Cook County, and the State of Illinois.
